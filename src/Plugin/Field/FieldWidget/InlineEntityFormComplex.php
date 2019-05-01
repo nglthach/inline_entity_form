@@ -39,7 +39,7 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
   /**
    * Constructs a InlineEntityFormComplex object.
    *
-   * @param array $plugin_id
+   * @param string $plugin_id
    *   The plugin_id for the widget.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
