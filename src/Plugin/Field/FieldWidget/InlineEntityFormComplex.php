@@ -623,8 +623,7 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
           $options = [
             'target_type' => $element['#target_type'],
             'handler' => $element['#selection_handler'],
-            'handler_settings' => $element['#selection_settings'],
-          ];
+          ] + $element['#selection_settings'];
           /** @var \Drupal\Core\Entity\EntityReferenceSelection\SelectionInterface $handler */
           $handler = $this->selectionManager->getInstance($options);
           $input_values = $element['#tags'] ? Tags::explode($element['#value']) : [$element['#value']];
