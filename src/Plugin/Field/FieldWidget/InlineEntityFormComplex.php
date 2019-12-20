@@ -507,6 +507,12 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
           '#ief_form' => 'add',
         ];
       }
+      else {
+        // If there are no items then remove field.
+        if (!isset($element['entities']['0'])) {
+          $element['#access'] = FALSE;
+        }
+      }
 
       if ($settings['allow_existing']) {
         $element['actions']['ief_add_existing'] = [
