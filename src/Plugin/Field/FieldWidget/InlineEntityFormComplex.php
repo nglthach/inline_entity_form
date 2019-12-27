@@ -524,6 +524,7 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
       }
     }
     else {
+      $new_key = count($entities);
       // There's a form open, show it.
       if ($form_state->get(['inline_entity_form', $this->getIefId(), 'form']) == 'add') {
         $element['form'] = [
@@ -533,8 +534,8 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
             'add',
             $this->determineBundle($form_state),
             $parent_langcode,
-            NULL,
-            array_merge($parents, ['inline_entity_form'])
+            $new_key,
+            array_merge($parents, [$new_key])
           )
         ];
         $element['form']['inline_entity_form']['#process'] = [
@@ -551,7 +552,7 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
           '#ief_id' => $this->getIefId(),
           // Used by Field API and controller methods to find the relevant
           // values in $form_state.
-          '#parents' => array_merge($parents),
+          '#parents' => array_merge($parents, [$new_key]),
           '#entity_type' => $target_type,
           '#ief_labels' => $this->getEntityTypeLabels(),
           '#match_operator' => $this->getSetting('match_operator'),
