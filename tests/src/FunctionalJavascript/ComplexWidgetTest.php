@@ -102,7 +102,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $assert_session->fieldNotExists('multi[form][inline_entity_form][last_name][0][value]');
     $assert_session->buttonExists('Add existing node', $multi_fieldset);
     // Now submit 'Add new node' button in the 'Multiple nodes' fieldset.
-    $multi_fieldset->pressButton('Add new node', $multi_fieldset);
+    $multi_fieldset->pressButton('Add new node');
     // Assert title field on inline form exists.
     $this->assertNotEmpty($assert_session->waitForField('multi[form][inline_entity_form][title][0][value]'));
     // Assert first name field on inline form exists.
@@ -115,7 +115,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     // Asserts 'Add existing node' form elements.
     $this->drupalGet($this->formContentAddUrl);
     $multi_fieldset = $assert_session->elementExists('css', 'fieldset[data-drupal-selector="edit-multi"]');
-    $multi_fieldset->pressButton('Add existing node', $multi_fieldset);
+    $multi_fieldset->pressButton('Add existing node');
     // Assert existing entity reference autocomplete field appears.
     $this->assertNotEmpty($assert_session->waitForField('multi[form][entity_id]'));
     $assert_session->buttonExists('Add node');
@@ -195,7 +195,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
 
     $parent_node = $this->drupalGetNodeByTitle('Some title');
     $this->assertNotEmpty($parent_node, 'Created ief_test_complex node ' . $parent_node->label());
-    $this->assertSame($node->id(), $parent_node->multi->target_id, 'Refererence node id set to ' . $node->id());
+    $this->assertSame($node->id(), $parent_node->multi->target_id, 'Reference node id set to ' . $node->id());
   }
 
   /**
@@ -596,7 +596,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
   /**
    * Checks that nested IEF entity references can be edited and saved.
    *
-   * @param \Drupal\node\Entity\NodeInterface $node
+   * @param \Drupal\node\NodeInterface $node
    *   Top level node of type ief_test_nested1 to check.
    */
   protected function checkNestedNodeEditing(NodeInterface $node) {
@@ -771,8 +771,8 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
 
     $this->drupalGet('node/add/ief_test_complex');
     $assert_session = $this->assertSession();
-    $assert_session->fieldNotExists('all_bundles[actions][bundle]', NULL, 'Bundle select is not shown when only one bundle is available.');
-    $assert_session->fieldNotExists('multi[form][inline_entity_form][title][0][value]', NULL);
+    $assert_session->fieldNotExists('all_bundles[actions][bundle]');
+    $assert_session->fieldNotExists('multi[form][inline_entity_form][title][0][value]');
 
     $user = $this->createUser([
       'create ief_test_complex content',
@@ -781,7 +781,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $this->drupalLogin($user);
 
     $this->drupalGet('node/add/ief_test_complex');
-    $assert_session->fieldExists('all_bundles[actions][bundle]', NULL, 'Bundle select is shown when more than one bundle is available.');
+    $assert_session->fieldExists('all_bundles[actions][bundle]');
     $this->assertOption('edit-all-bundles-actions-bundle', 'ief_reference_type');
     $this->assertOption('edit-all-bundles-actions-bundle', 'ief_test_complex');
     $assert_session->fieldExists('multi[form][inline_entity_form][title][0][value]');

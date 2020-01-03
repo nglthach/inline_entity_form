@@ -104,11 +104,13 @@ class ComplexSimpleWidgetTest extends InlineEntityFormTestBase {
 
         // Check the nodes were created correctly.
         $host_node = $this->drupalGetNodeByTitle($host_title);
-        if ($this->assertNotNull($host_node->ief_complex_outer->entity, 'Outer node was created.')) {
+        $this->assertNotNull($host_node->ief_complex_outer->entity, 'Outer node was created.');
+        if (isset($host_node->ief_complex_outer->entity)) {
           $outer_node = $host_node->ief_complex_outer->entity;
           $this->assertEquals($outer_title, $outer_node->label(), "Outer node's title looks correct.");
           $this->assertEquals('ief_simple_single', $outer_node->bundle(), "Outer node's type looks correct.");
-          if ($this->assertNotNull($outer_node->single->entity, 'Inner node was created')) {
+          $this->assertNotNull($outer_node->single->entity, 'Inner node was created');
+          if (isset($outer_node->single->entity)) {
             $inner_node = $outer_node->single->entity;
             $this->assertEquals($inner_title, $inner_node->label(), "Inner node's title looks correct.");
             $this->assertEquals('ief_test_custom', $inner_node->bundle(), "Inner node's type looks correct.");

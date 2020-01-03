@@ -158,13 +158,17 @@ class SimpleWidgetTest extends InlineEntityFormTestBase {
 
     // Check that nodes were created correctly.
     $host_node = $this->getNodeByTitle($host_node_title);
-    if ($this->assertNotNull($host_node, 'Host node created.')) {
+    $this->assertNotNull($host_node, 'Host node created.');
+    if (isset($host_node)) {
       // Assert that address is the canonical page after node add.
-      $this->assertSession()->addressEquals($host_node->toUrl('canonical')->toString());
+      $this->assertSession()
+        ->addressEquals($host_node->toUrl('canonical', ['absolute' => TRUE])
+          ->toString());
       $child_node = $this->getNodeByTitle($child_title);
-      if ($this->assertNotNull($child_node)) {
+      $this->assertNotNull($child_node);
+      if (isset($child_node)) {
         $this->assertSame($host_node->single[0]->target_id, $child_node->id(), 'Child node is referenced');
-        $this->assertSame($child_node->positive_int[0]->value, 1, 'Child node int field correct.');
+        $this->assertSame($child_node->positive_int[0]->value, '1', 'Child node int field correct.');
         $this->assertSame($child_node->bundle(), 'ief_test_custom', 'Child node is correct bundle.');
       }
     }
@@ -248,7 +252,7 @@ class SimpleWidgetTest extends InlineEntityFormTestBase {
       $this->assertNotEmpty($assert_session->waitForField("single[$next_item_number][inline_entity_form][title][0][value]"));
       // Make sure only 1 item is added.
       $unexpected_item_number = $next_item_number + 1;
-      // Asssert extra item $unexpected_item_number is not added after
+      // Assert extra item $unexpected_item_number is not added after
       // 'Add More' clicked.
       $assert_session->fieldNotExists("single[$unexpected_item_number][inline_entity_form][title][0][value]");
     }

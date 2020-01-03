@@ -70,7 +70,7 @@ abstract class InlineEntityFormTestBase extends WebDriverTestBase {
     /** @var \SimpleXMLElement[] $elements */
     if ($elements = $this->xpath($xpath)) {
       foreach ($elements[0]->attributes() as $name => $value) {
-        if ($name == 'name') {
+        if ($name === 'name') {
           $retval = $value;
           break;
         }
@@ -111,10 +111,9 @@ abstract class InlineEntityFormTestBase extends WebDriverTestBase {
       $message = "Node with title found: $title";
     }
     $node = $this->getNodeByTitle($title, TRUE);
-    if ($this->assertNotEmpty($node, $message)) {
-      if ($content_type) {
-        $this->assertEqual($node->bundle(), $content_type, "Node is correct content type: $content_type");
-      }
+    $this->assertNotEmpty($node, $message);
+    if ($content_type) {
+      $this->assertEqual($node->bundle(), $content_type, "Node is correct content type: $content_type");
     }
   }
 
@@ -261,7 +260,7 @@ abstract class InlineEntityFormTestBase extends WebDriverTestBase {
    * @return bool
    *   TRUE if not found, FALSE if found.
    *
-   * @see Drupal\FunctionalJavascriptTests\JSWebAssert::waitForElementRemoved
+   * @see \Drupal\FunctionalJavascriptTests\JSWebAssert::waitForElementRemoved
    */
   public function waitForElementRemoved($selector, $locator, $timeout = 10000) {
     $page = $this->getSession()->getPage();
