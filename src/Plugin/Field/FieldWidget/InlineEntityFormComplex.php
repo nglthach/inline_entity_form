@@ -618,7 +618,8 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
         $values[] = ['entity' => $entity];
       }
       elseif ($widget_state['form'] == 'ief_add_existing') {
-        $element = NestedArray::getValue($form, [$field_name, 'widget', 'form'])['entity_id'];
+        $parent = NestedArray::getValue($form, [$field_name, 'widget', 'form']);
+        $element = isset($parent['entity_id']) ? $parent['entity_id'] : [];
         if (!empty($element['#value'])) {
           $options = [
             'target_type' => $element['#target_type'],
