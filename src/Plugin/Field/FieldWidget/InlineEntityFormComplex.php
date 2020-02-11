@@ -880,9 +880,6 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
     $remove_button = $form_state->getTriggeringElement();
     $delta = $remove_button['#ief_row_delta'];
 
-    /** @var \Drupal\Core\Field\FieldDefinitionInterface $instance */
-    $instance = $form_state->get(['inline_entity_form', $element['#ief_id'], 'instance']);
-
     /** @var \Drupal\Core\Entity\EntityInterface $entity */
     $entity = $element['entities'][$delta]['form']['#entity'];
     $entity_id = $entity->id();
