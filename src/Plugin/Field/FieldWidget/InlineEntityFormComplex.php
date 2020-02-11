@@ -25,7 +25,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "inline_entity_form_complex",
  *   label = @Translation("Inline entity form - Complex"),
  *   field_types = {
- *     "entity_reference"
+ *     "entity_reference",
+ *     "entity_reference_revisions",
  *   },
  *   multiple_values = true
  * )

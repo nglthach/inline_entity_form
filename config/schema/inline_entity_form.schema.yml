@@ -31,6 +31,9 @@ field.widget.settings.inline_entity_form_simple:
     collapsed:
       type: boolean
       label: "Collapsed by default"
+    revision:
+      type: boolean
+      label: "Create new revision"
 
 field.widget.settings.inline_entity_form_complex:
   type: mapping
@@ -66,3 +69,6 @@ field.widget.settings.inline_entity_form_complex:
     collapsed:
       type: boolean
       label: "Collapsed by default"
+    revision:
+      type: boolean
+      label: "Create new revision"

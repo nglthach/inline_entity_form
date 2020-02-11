@@ -420,7 +420,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $this->assertRowByTitle('Some reference 3');
 
     // Check if all remaining nodes from all bundles are referenced.
-    $assert_session->elementsCount('css', 'fieldset[data-drupal-selector="edit-all-bundles"] tr.ief-row-entity', 9);
+    $assert_session->elementsCount('css', 'fieldset[data-drupal-selector="edit-all-bundles"] tr.ief-row-entity', 12);
     foreach ($bundle_nodes as $id => $title) {
       $this->assertRowByTitle($title);
     }
