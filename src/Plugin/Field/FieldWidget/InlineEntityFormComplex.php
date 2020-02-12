@@ -17,6 +17,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\Element;
 use Drupal\inline_entity_form\TranslationHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Component\Utility\Crypt;
 
 /**
  * Complex inline widget.
@@ -213,9 +214,9 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
     ]);
 
     // Assign a unique identifier to each IEF widget.
-    // Since $parents can get quite long, sha1() ensures that every id has
+    // Since $parents can get quite long, hashing ensures that every id has
     // a consistent and relatively short length while maintaining uniqueness.
-    $this->setIefId(sha1(implode('-', $parents)));
+    $this->setIefId(Crypt::hashBase64(implode('-', $parents)));
 
     // Get the langcode of the parent entity.
     $parent_langcode = $items->getEntity()->language()->getId();
@@ -598,7 +599,7 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
 
     $field_name = $this->fieldDefinition->getName();
     $parents = array_merge($form['#parents'], [$field_name, 'form']);
-    $ief_id = sha1(implode('-', $parents));
+    $ief_id = Crypt::hashBase64(implode('-', $parents));
     $this->setIefId($ief_id);
     $widget_state = &$form_state->get(['inline_entity_form', $ief_id]);
     foreach ($widget_state['entities'] as $key => $value) {
