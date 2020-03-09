@@ -1,8 +1,6 @@
 <?php
 
-namespace Drupal\inline_entity_form\Tests;
-
-use Drupal\Tests\inline_entity_form\FunctionalJavascript\InlineEntityFormTestBase;
+namespace Drupal\Tests\inline_entity_form\FunctionalJavascript;
 
 /**
  * IEF complex entity reference revisions tests.
@@ -153,7 +151,7 @@ class ComplexWidgetRevisionsTest extends InlineEntityFormTestBase {
     // Change level 2 IEF node title.
     $assert_session->fieldExists($lvl_2_title_field)->setValue('Level 2.2');
     $assert_session->elementExists('css', $lvl_2_update_node_button)->press();
-    $this->assertNotEmpty($assert_session->waitForElement('css', $lvl_2_edit_button));;
+    $this->assertNotEmpty($assert_session->waitForElement('css', $lvl_2_edit_button));
 
     // Save the top level entity.
     $page->fillField('title[0][value]', 'Level 1.2');
