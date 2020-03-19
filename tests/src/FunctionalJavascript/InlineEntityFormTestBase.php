@@ -243,6 +243,23 @@ abstract class InlineEntityFormTestBase extends WebDriverTestBase {
   }
 
   /**
+   * Returns xpath selector to the index-th input with label.
+   *
+   * Note: index starts at 1.
+   *
+   * @param string $label
+   *   The label text to select.
+   * @param int $index
+   *   The index of the input to select.
+   *
+   * @return string
+   *   The xpath selector for the input to select.
+   */
+  protected function getXpathForNthInputByLabelText($label, $index) {
+    return "(//*[@id=string((//label[.='{$label}']/@for)[{$index}])])";
+  }
+
+  /**
    * Looks for the specified selector and returns TRUE when it is unavailable.
    *
    * @todo Remove when tests are running on Drupal 8.8. or greater. Then
