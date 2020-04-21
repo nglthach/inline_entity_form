@@ -6,5 +6,8 @@
   "minimum-stability": "dev",
   "require": {
     "drupal/core": "^8.7.7 || ^9"
+  },
+  "require-dev": {
+    "drupal/entity_reference_revisions": "^1.0"
   }
 }
