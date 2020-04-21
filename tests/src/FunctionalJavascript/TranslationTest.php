@@ -80,7 +80,7 @@ class TranslationTest extends InlineEntityFormTestBase {
     $multi_fieldset = $assert_session->elementExists('css', 'fieldset[data-drupal-selector="edit-multi"]');
     $multi_fieldset->pressButton('Add existing node');
     // Reference the German node.
-    $this->assertNotEmpty($field = $assert_session->waitForField('multi[form][entity_id]'));
+    $this->assertNotEmpty($field = $assert_session->waitForElement('xpath', $this->getXpathForAutoCompleteInput()));
     $field->setValue('Kann ein KÃ¤nguru hÃ¶her als ein Haus springen? (' . $first_inline_node->id() . ')');
     $page->pressButton('Add node');
     $this->waitForRowByTitle('Kann ein KÃ¤nguru hÃ¶her als ein Haus springen?');

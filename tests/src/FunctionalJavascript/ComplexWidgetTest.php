@@ -122,7 +122,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $multi_fieldset = $assert_session->elementExists('css', 'fieldset[data-drupal-selector="edit-multi"]');
     $multi_fieldset->pressButton('Add existing node');
     // Assert existing entity reference autocomplete field appears.
-    $this->assertNotEmpty($assert_session->waitForField('multi[form][entity_id]'));
+    $this->assertNotEmpty($assert_session->waitForElement('xpath', $this->getXpathForAutoCompleteInput()));
     $assert_session->buttonExists('Add node');
     $assert_session->buttonExists('Cancel');
   }
@@ -782,7 +782,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $assert_session = $this->assertSession();
     $this->assertNotEmpty($multi_fieldset = $assert_session->waitForElement('css', 'fieldset[data-drupal-selector="edit-multi"]'));
     $assert_session->buttonExists('Add existing node', $multi_fieldset)->press();
-    $this->assertNotEmpty($assert_session->waitForField('multi[form][entity_id]'));
+    $this->assertNotEmpty($assert_session->waitForElement('xpath', $this->getXpathForAutoCompleteInput()));
   }
 
   /**
@@ -800,11 +800,12 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $page = $this->getSession()->getPage();
     $assert_session = $this->assertSession();
     $this->openMultiExistingForm();
-    $page->fillField('multi[form][entity_id]', $existing_node_text);
+    $field = $assert_session->waitForElement('xpath', $this->getXpathForAutoCompleteInput());
+    $field->setValue($existing_node_text);
     $page->pressButton('Add node');
     $this->assertNotEmpty($assert_session->waitForText($expected_error));
     $assert_session->buttonExists('Cancel')->press();
-    $this->assertNotEmpty($this->waitForElementRemoved('css', 'input[name="multi[form][entity_id]"]'));
+    $this->assertNotEmpty($this->waitForElementRemoved('xpath', $this->getXpathForAutoCompleteInput()));
   }
 
   /**

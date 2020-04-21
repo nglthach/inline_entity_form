@@ -260,6 +260,16 @@ abstract class InlineEntityFormTestBase extends WebDriverTestBase {
   }
 
   /**
+   * Returns xpath selector to the first input with an auto-complete.
+   *
+   * @return string
+   *   The xpath selector for the first input with an auto-complete.
+   */
+  protected function getXpathForAutoCompleteInput() {
+    return '(//input[@data-autocomplete-path])';
+  }
+
+  /**
    * Looks for the specified selector and returns TRUE when it is unavailable.
    *
    * @todo Remove when tests are running on Drupal 8.8. or greater. Then
