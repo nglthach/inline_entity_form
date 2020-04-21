@@ -209,7 +209,7 @@ abstract class InlineEntityFormTestBase extends WebDriverTestBase {
   }
 
   /**
-   * Wait for an IEF table row to appear.
+   * Wait for an IEF table row to disappear.
    *
    * @param string $title
    *   The title of the row for which to wait.
@@ -219,10 +219,10 @@ abstract class InlineEntityFormTestBase extends WebDriverTestBase {
   }
 
   /**
-   * Asserts that an IEF table row appears.
+   * Asserts that an IEF table row exists.
    *
    * @param string $title
-   *   The title of the row for which to wait.
+   *   The title of the row to check.
    *
    * @return \Behat\Mink\Element\NodeElement
    *   The <td> element containing the label for the IEF row.
@@ -233,10 +233,10 @@ abstract class InlineEntityFormTestBase extends WebDriverTestBase {
   }
 
   /**
-   * Asserts that an IEF table row appears.
+   * Asserts that an IEF table row does not exist.
    *
    * @param string $title
-   *   The title of the row for which to wait.
+   *   The title of the row to check.
    */
   protected function assertNoRowByTitle($title) {
     $this->assertSession()->elementNotExists('xpath', '//td[@class="inline-entity-form-node-label" and text()="' . $title . '"]');
