@@ -270,6 +270,23 @@ abstract class InlineEntityFormTestBase extends WebDriverTestBase {
   }
 
   /**
+   * Returns xpath selector to the index-th button with button text value.
+   *
+   * Note: index starts at 1.
+   *
+   * @param string @value
+   *   The text on the button to select.
+   * @param int $index
+   *   The index of the button to select.
+   *
+   * @return string
+   *   The xpath selector for the button to select.
+   */
+  protected function getXpathForButtonWithValue($value, $index) {
+    return "(//input[@type='submit' and @value='{$value}'][{$index}])";
+  }
+
+  /**
    * Looks for the specified selector and returns TRUE when it is unavailable.
    *
    * @todo Remove when tests are running on Drupal 8.8. or greater. Then
