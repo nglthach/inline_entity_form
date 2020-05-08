@@ -75,7 +75,7 @@ class ComplexSimpleWidgetTest extends InlineEntityFormTestBase {
           // Field should not be available before ajax submit.
           $assert_session->elementNotExists('xpath', $outer_title_field_xpath);
           $assert_session
-            ->elementExists('xpath', '//input[@type="submit" and @value="Add new node" and @data-drupal-selector="edit-ief-complex-outer-actions-ief-add"]')
+            ->elementExists('xpath', '//input[@type="submit" and @value="Add new node"]')
             ->press();
           $this->assertNotEmpty($assert_session->waitForElement('xpath', $outer_title_field_xpath));
         }
@@ -85,7 +85,7 @@ class ComplexSimpleWidgetTest extends InlineEntityFormTestBase {
         // Simple widget is required so should always show up. No need for
         // add submit.
         $assert_session->elementExists('xpath', $inner_title_field_xpath)->setValue($inner_title);
-        $create_outer_button_selector = '//input[@type="submit" and @value="Create node" and @data-drupal-selector="edit-ief-complex-outer-form-inline-entity-form-actions-ief-add-save"]';
+        $create_outer_button_selector = '//input[@type="submit" and @value="Create node"]';
         $assert_session->elementExists('xpath', $create_outer_button_selector)->press();
         // After Ajax submit the ief title fields should be gone.
         $this->assertNotEmpty($assert_session->waitForButton('Edit'));
