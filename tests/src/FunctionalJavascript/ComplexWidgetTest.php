@@ -430,7 +430,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
       $all_bundles_fieldset = $assert_session
         ->elementExists('css', 'fieldset[data-drupal-selector="edit-all-bundles"]');
       $assert_session->buttonExists('Add existing node', $all_bundles_fieldset)->press();
-      $this->assertNotEmpty($assert_session->waitForField('all_bundles[form][entity_id]'));
+      $this->assertNotEmpty($assert_session->waitForElement('xpath', $node_field_xpath));
       $assert_session->elementExists('xpath', $node_field_xpath)->setValue($title . ' (' . $id . ')');
       $page->pressButton('Add node');
       $this->waitForRowByTitle($title);
