@@ -242,8 +242,6 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
       $element['#open'] = !$this->getSetting('collapsed');
     }
 
-    $element['#attached']['library'][] = 'inline_entity_form/widget';
-
     $this->prepareFormState($form_state, $items, $element['#translating']);
     $entities = $form_state->get(['inline_entity_form', $this->getIefId(), 'entities']);
 
