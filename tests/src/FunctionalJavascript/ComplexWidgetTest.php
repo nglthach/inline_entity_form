@@ -865,4 +865,45 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     }
   }
 
+  /**
+   * Tests the separation of nested data.
+   *
+   * Using entity creation with different bundles nested in each other.
+   * Ief_test_nested1 -> ief_test_nested2 -> ief_test_nested3
+   *
+   * When creating a second ief_test_nested2 it should be empty and not be
+   * prefilled with the ief_test_nested3 of the first ief_test_nested2.
+   */
+  public function testSeparateNestedDataMultiValueFields() {
+    // Get the xpath selectors for the input fields in this test.
+    $top_title_field_xpath = $this->getXpathForNthInputByLabelText('Title', 1);
+    $nested_title_field_xpath = $this->getXpathForNthInputByLabelText('Title', 2);
+    $double_nested_title_field_xpath = $this->getXpathForNthInputByLabelText('Title', 3);
+
+    $page = $this->getSession()->getPage();
+    $assert_session = $this->assertSession();
+    foreach ([FALSE, TRUE] as $required) {
+      $this->setupNestedComplexForm($required);
+      $required_string = ($required) ? ' required' : ' unrequired';
+      $double_nested_title = 'Dream within a dream' . $required_string;
+      $nested_title = 'Dream' . $required_string;
+      $top_level_title = 'Reality' . $required_string;
+      $assert_session->elementExists('xpath', $top_title_field_xpath)
+        ->setValue($top_level_title);
+      $assert_session->elementExists('xpath', $nested_title_field_xpath)
+        ->setValue($nested_title);
+      $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
+        ->setValue($double_nested_title);
+      $page->pressButton('Create node 3');
+      $assert_session->waitForButton('Add new node 3');
+      $page->pressButton('Create node 2');
+      $assert_session->waitForButton('Add new node 2');
+      $page->pressButton('Add new node 2');
+      $assert_session->waitForButton('Add new node 3');
+      // The new node 2 should be empty and not already have a
+      // double_nested_title present.
+      $this->assertNoRowByTitle($double_nested_title);
+    }
+  }
+
 }
