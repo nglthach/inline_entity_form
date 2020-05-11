@@ -1,0 +1,14 @@
+diff a/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php b/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php	(rejected hunks)
+@@ -245,7 +245,11 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
+     $element['#attached']['library'][] = 'inline_entity_form/widget';
+ 
+     $this->prepareFormState($form_state, $items, $element['#translating']);
+-    $entities = $form_state->get(['inline_entity_form', $this->getIefId(), 'entities']);
++    $entities = $form_state->get([
++      'inline_entity_form',
++      $this->getIefId(),
++      'entities',
++    ]);
+ 
+     // Prepare cardinality information.
+     $entities_count = count($entities);

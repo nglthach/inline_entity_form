@@ -274,7 +274,7 @@ abstract class InlineEntityFormTestBase extends WebDriverTestBase {
    *
    * Note: index starts at 1.
    *
-   * @param string @value
+   * @param string $value
    *   The text on the button to select.
    * @param int $index
    *   The index of the button to select.
