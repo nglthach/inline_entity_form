@@ -554,7 +554,7 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
             $this->determineBundle($form_state),
             $parent_langcode,
             $new_key,
-            array_merge($parents, [$new_key]),
+            array_merge($parents, [$new_key])
           ),
         ];
         $element['form']['inline_entity_form']['#process'] = [
