@@ -59,7 +59,7 @@ class InlineEntityFormSimple extends InlineEntityFormBase {
     $parents = array_merge($element['#field_parents'], [
       $items->getName(),
       $delta,
-      'inline_entity_form',
+      'inline_entity_form'
     ]);
     $bundle = $this->getBundle();
     $element['inline_entity_form'] = $this->getInlineEntityForm($op, $bundle, $langcode, $delta, $parents, $entity);
