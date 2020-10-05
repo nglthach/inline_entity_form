@@ -287,6 +287,21 @@ abstract class InlineEntityFormTestBase extends WebDriverTestBase {
   }
 
   /**
+   * Returns xpath selector for fieldset label.
+   *
+   * @param string $label
+   *   The label text to select.
+   * @param int $index
+   *   The index of the fieldset label to select.
+   *
+   * @return string
+   *   The xpath selector for the fieldset label to select.
+   */
+  protected function getXpathForFieldsetLabel($label, $index) {
+    return "(//fieldset/legend/span[.='{$label}'])[{$index}]";
+  }
+
+  /**
    * Looks for the specified selector and returns TRUE when it is unavailable.
    *
    * @todo Remove when tests are running on Drupal 8.8. or greater. Then
