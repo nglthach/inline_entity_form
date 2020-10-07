@@ -18,12 +18,12 @@ class SimpleWidgetTest extends InlineEntityFormTestBase {
    *
    * @var array
    */
-  public static $modules = ['inline_entity_form_test'];
+  protected static $modules = ['inline_entity_form_test'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->user = $this->createUser([
@@ -260,7 +260,7 @@ class SimpleWidgetTest extends InlineEntityFormTestBase {
       $child_node = $host_node->single[$delta]->entity;
       // Assert the form of child node with edit access is found.
       $delta_field = $assert_session->fieldExists("single[$delta][inline_entity_form][title][0][value]");
-      $this->assertContains($child_node->label(), $delta_field->getValue());
+      $this->assertStringContainsString($child_node->label(), $delta_field->getValue());
       $delta++;
     }
     // Check that there is NOT an extra "add" form when editing.

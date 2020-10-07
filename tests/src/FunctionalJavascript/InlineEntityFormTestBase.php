@@ -38,7 +38,7 @@ abstract class InlineEntityFormTestBase extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->fieldStorageConfigStorage = $this->container->get('entity_type.manager')->getStorage('field_storage_config');
     $this->fieldConfigStorage = $this->container->get('entity_type.manager')->getStorage('field_config');
