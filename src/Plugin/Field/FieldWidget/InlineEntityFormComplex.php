@@ -239,7 +239,8 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
       ],
     ] + $element;
     if ($element['#type'] == 'details') {
-      $element['#open'] = !$this->getSetting('collapsed');
+      // If there's user input, keep the details open. Otherwise, use settings.
+      $element['#open'] = $form_state->getUserInput() ?: !$this->getSetting('collapsed');
     }
 
     $this->prepareFormState($form_state, $items, $element['#translating']);

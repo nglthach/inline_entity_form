@@ -45,7 +45,8 @@ class InlineEntityFormSimple extends InlineEntityFormBase {
       ],
     ] + $element;
     if ($element['#type'] == 'details') {
-      $element['#open'] = !$this->getSetting('collapsed');
+      // If there's user input, keep the details open. Otherwise, use settings.
+      $element['#open'] = $form_state->getUserInput() ?: !$this->getSetting('collapsed');
     }
 
     $item = $items->get($delta);
