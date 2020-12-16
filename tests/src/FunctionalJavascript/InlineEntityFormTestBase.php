@@ -113,7 +113,7 @@ abstract class InlineEntityFormTestBase extends WebDriverTestBase {
     $node = $this->getNodeByTitle($title, TRUE);
     $this->assertNotEmpty($node, $message);
     if ($content_type) {
-      $this->assertEqual($node->bundle(), $content_type, "Node is correct content type: $content_type");
+      $this->assertEquals($node->bundle(), $content_type, "Node is correct content type: $content_type");
     }
   }
 

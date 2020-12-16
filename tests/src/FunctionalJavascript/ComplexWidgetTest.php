@@ -857,8 +857,8 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
 
     $this->drupalGet('node/add/ief_test_complex');
     $assert_session->fieldExists('all_bundles[actions][bundle]');
-    $this->assertOption('edit-all-bundles-actions-bundle', 'ief_reference_type');
-    $this->assertOption('edit-all-bundles-actions-bundle', 'ief_test_complex');
+    $this->assertSession()->optionExists('edit-all-bundles-actions-bundle', 'ief_reference_type');
+    $this->assertSession()->optionExists('edit-all-bundles-actions-bundle', 'ief_test_complex');
     $assert_session->elementExists('xpath', $nested_title_field_xpath);
   }
 

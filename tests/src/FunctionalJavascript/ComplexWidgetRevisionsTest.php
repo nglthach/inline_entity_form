@@ -172,14 +172,14 @@ class ComplexWidgetRevisionsTest extends InlineEntityFormTestBase {
     $node_level_2_vid_new = $node_level_2->getLoadedRevisionId();
 
     // Assert that a new revision created.
-    $this->assertNotEqual($node_level_2_vid, $node_level_2_vid_new);
+    $this->assertNotEquals($node_level_2_vid, $node_level_2_vid_new);
 
     // Load the current revision id of the Level 3 node.
     $node_level_3 = $this->drupalGetNodeByTitle('Level 3.2');
     $node_level_3_vid_new = $node_level_3->getLoadedRevisionId();
 
     // Assert that no new revision created.
-    $this->assertEqual($node_level_3_vid, $node_level_3_vid_new);
+    $this->assertEquals($node_level_3_vid, $node_level_3_vid_new);
   }
 
   /**
@@ -257,7 +257,7 @@ class ComplexWidgetRevisionsTest extends InlineEntityFormTestBase {
     $entity_no_bundle_vid_new = $entity_no_bundle->getLoadedRevisionId();
 
     // Assert that new revision was created.
-    $this->assertNotEqual($entity_no_bundle_vid, $entity_no_bundle_vid_new);
+    $this->assertNotEquals($entity_no_bundle_vid, $entity_no_bundle_vid_new);
   }
 
 }
