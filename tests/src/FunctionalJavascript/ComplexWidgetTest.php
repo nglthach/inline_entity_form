@@ -827,7 +827,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $field = $assert_session->waitForElement('xpath', $this->getXpathForAutoCompleteInput());
     $field->setValue($existing_node_text);
     $page->pressButton('Add node');
-    $this->assertNotEmpty($assert_session->waitForText($expected_error));
+    $this->assertNotNull($assert_session->waitForText($expected_error));
     $assert_session->buttonExists('Cancel')->press();
     $this->assertNotEmpty($this->waitForElementRemoved('xpath', $this->getXpathForAutoCompleteInput()));
   }
