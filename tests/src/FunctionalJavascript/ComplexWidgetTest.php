@@ -345,7 +345,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $assert_session->elementExists('xpath', $first_name_field_xpath)->setValue('John');
     $assert_session->elementExists('xpath', $last_name_field_xpath)->setValue('Doe');
     $page->pressButton('Update node');
-    $this->assertNotEmpty($this->waitForElementRemoved('css', 'div[data-drupal-selector="edit-multi-form-inline-entity-form-entities-1-form"]'));
+    $this->assertNotEmpty($assert_session->waitForElementRemoved('css', 'div[data-drupal-selector="edit-multi-form-inline-entity-form-entities-1-form"]'));
     $this->waitForRowByTitle('Some reference 2');
 
     // Save the ief_test_complex node.
@@ -690,7 +690,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
 
     // Close the nested IEF form.
     $page->pressButton('Update node 2');
-    $this->assertNotEmpty($this->waitForElementRemoved('css', 'div[data-drupal-selector="edit-test-ref-nested1-form-inline-entity-form-entities-0-form"]'));
+    $this->assertNotEmpty($assert_session->waitForElementRemoved('css', 'div[data-drupal-selector="edit-test-ref-nested1-form-inline-entity-form-entities-0-form"]'));
     $this->waitForRowByTitle($nested_node->label());
     // Save the top level node.
     $page->pressButton('Save');
@@ -829,7 +829,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $page->pressButton('Add node');
     $this->assertNotNull($assert_session->waitForText($expected_error));
     $assert_session->buttonExists('Cancel')->press();
-    $this->assertNotEmpty($this->waitForElementRemoved('xpath', $this->getXpathForAutoCompleteInput()));
+    $this->assertNotEmpty($assert_session->waitForElementRemoved('xpath', $this->getXpathForAutoCompleteInput()));
   }
 
   /**
