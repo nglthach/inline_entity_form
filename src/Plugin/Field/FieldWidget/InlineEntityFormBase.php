@@ -2,6 +2,7 @@
 
 namespace Drupal\inline_entity_form\Plugin\Field\FieldWidget;
 
+use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
@@ -143,6 +144,19 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
    */
   protected function getIefId() {
     return $this->iefId;
+  }
+
+  /**
+   * Make an IEF ID.
+   *
+   * @param array $parents
+   *   The array parents of the current IEF.
+   *
+   * @return string
+   *   The ID for the IEF.
+   */
+  protected function makeIefId(array $parents) {
+    return Crypt::hashBase64(implode('-', $parents));
   }
 
   /**
