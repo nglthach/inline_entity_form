@@ -128,6 +128,8 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
   /**
    * Sets inline entity form ID.
    *
+   * @see ::makeIefId
+   *
    * @param string $ief_id
    *   The inline entity form ID.
    */
@@ -146,13 +148,18 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
   }
 
   /**
-   * Make an IEF ID.
+   * Makes an IEF ID from array parents.
    *
-   * @param array $parents
-   *   The array parents of the current IEF.
+   * IEF ID is used a) for element ID, b) for form state keys.
+   * We need the IEF form ID to reflect the tree structure of IEFs, so that
+   * the form state keys can be sorted to ensure inside-out saving of entities.
    *
+   * @see \Drupal\inline_entity_form\WidgetSubmit::doSubmit
+   *
+   * @param string[] $parents
+   *   The array parents.
    * @return string
-   *   The ID for the IEF.
+   *   The resulting inline entity form ID.
    */
   protected function makeIefId(array $parents) {
     return implode('-', $parents);
