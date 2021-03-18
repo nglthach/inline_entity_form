@@ -313,6 +313,89 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     }
   }
 
+  public function testNestedCreateAndEdit() {
+    // @todo Factor these out into reusable methods.
+    // Get the xpath selectors for the input fields in this test.
+    $top_title_field_xpath = $this->getXpathForNthInputByLabelText('Title', 1);
+    $nested_title_field_xpath = $this->getXpathForNthInputByLabelText('Title', 2);
+    $double_nested_title_field_xpath = $this->getXpathForNthInputByLabelText('Title', 3);
+
+    // Get the xpath selectors for the buttons in this test.
+    $first_add_new_node_button_xpath = $this->getXpathForButtonWithValue('Add new node', 1);
+    $first_create_node_button_xpath = $this->getXpathForButtonWithValue('Create node', 1);
+    $first_edit_button_xpath = $this->getXpathForButtonWithValue('Edit', 1);
+    $first_update_button_xpath = $this->getXpathForButtonWithValue('Update node', 1);
+
+
+    $this->drupalGet($this->formContentAddUrl);
+    $page = $this->getSession()->getPage();
+    $assert_session = $this->assertSession();
+
+    // Open level 2 ADD form.
+    $assert_session->elementExists('xpath', $first_add_new_node_button_xpath)->press();
+    $this->htmlOutput();
+    $assert_session->waitForElementRemoved('xpath', $first_add_new_node_button_xpath);
+    $this->htmlOutput();
+
+    // Open level 3 ADD form.
+    $assert_session->elementExists('xpath', $first_add_new_node_button_xpath)->press();
+    $this->htmlOutput();
+
+    // Fill in and save level 3 IEF form.
+    $this->assertNotEmpty($assert_session->waitForElement('xpath', $double_nested_title_field_xpath));
+    $assert_session->elementExists('xpath', $double_nested_title_field_xpath)->setValue('Level 3.1');
+    $assert_session->elementExists('xpath', $first_create_node_button_xpath)->press();
+    $this->htmlOutput();
+    $this->assertNotEmpty($assert_session->waitForElement('xpath', $first_edit_button_xpath));
+    $this->htmlOutput();
+
+    // Fill in and save level 2 IEF form.
+    $assert_session->elementExists('xpath', $nested_title_field_xpath)->setValue('Level 2');
+    $assert_session->elementExists('xpath', $first_create_node_button_xpath)->press();
+    $this->htmlOutput();
+    $this->assertNotEmpty($assert_session->waitForElement('xpath', $first_edit_button_xpath));
+    $this->htmlOutput();
+
+    // Open level 2 EDIT form.
+    $assert_session->elementExists('xpath', $first_edit_button_xpath)->press();
+    $this->htmlOutput();
+    $assert_session->waitForElementRemoved('xpath', $first_edit_button_xpath);
+    $this->htmlOutput();
+
+    // Open level 3 ADD form.
+    $assert_session->elementExists('xpath', $first_add_new_node_button_xpath)->press();
+    $this->htmlOutput();
+
+    // Fill in and save level 3 IEF form.
+    $this->assertNotEmpty($assert_session->waitForElement('xpath', $double_nested_title_field_xpath));
+    $this->htmlOutput();
+    $assert_session->elementExists('xpath', $double_nested_title_field_xpath)->setValue('Level 3.2');
+    $assert_session->elementExists('xpath', $first_create_node_button_xpath)->press();
+    $this->htmlOutput();
+    $this->assertNotEmpty($assert_session->waitForElement('xpath', $first_edit_button_xpath));
+    $this->htmlOutput();
+
+    // Update level 2.
+    $assert_session->elementExists('xpath', $first_update_button_xpath)->press();
+    $this->htmlOutput();
+    $this->assertNotEmpty($assert_session->waitForElement('xpath', $first_edit_button_xpath));
+    $this->htmlOutput();
+
+    // Save the top level entity.
+    $assert_session->elementExists('xpath', $top_title_field_xpath)->setValue('Level 1');
+    $this->htmlOutput();
+    $assert_session->waitForElementRemoved('xpath', $first_edit_button_xpath);
+    $this->htmlOutput();
+    $page->pressButton('Save');
+    $this->htmlOutput();
+
+    // Assert that the entities are correctly saved.
+    $assert_session->pageTextContains('Level 1 has been created.');
+    $assert_session->pageTextContains('Level 2');
+    $assert_session->pageTextContains('Level 3.1');
+    $assert_session->pageTextContains('Level 3.2');
+  }
+
   /**
    * Tests if editing and removing entities work.
    */
