@@ -334,8 +334,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     // Open level 2 ADD form.
     $assert_session->elementExists('xpath', $first_add_new_node_button_xpath)->press();
     $this->htmlOutput();
-    $assert_session->waitForElementRemoved('xpath', $first_add_new_node_button_xpath);
-    $this->htmlOutput();
+    // @todo Why don't i need to open level 3? Auto-opened?
 
     // Open level 3 ADD form.
     $assert_session->elementExists('xpath', $first_add_new_node_button_xpath)->press();
