@@ -379,21 +379,17 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
         'entities' => [],
       ];
       // Store the $items entities in the widget state, for further manipulation.
-      foreach ($items as $delta => $item) {
-        $entity = $item->entity;
-        // The $entity can be NULL if the reference is broken.
-        if ($entity) {
-          // Display the entity in the correct translation.
-          if ($translating) {
-            $entity = TranslationHelper::prepareEntity($entity, $form_state);
-          }
-          $widget_state['entities'][$delta] = [
-            'entity' => $entity,
-            'weight' => $delta,
-            'form' => NULL,
-            'needs_save' => $entity->isNew(),
-          ];
+      foreach ($items->referencedEntities() as $delta => $entity) {
+        // Display the entity in the correct translation.
+        if ($translating) {
+          $entity = TranslationHelper::prepareEntity($entity, $form_state);
         }
+        $widget_state['entities'][$delta] = [
+          'entity' => $entity,
+          'weight' => $delta,
+          'form' => NULL,
+          'needs_save' => $entity->isNew(),
+        ];
       }
       $form_state->set(['inline_entity_form', $this->iefId], $widget_state);
     }
