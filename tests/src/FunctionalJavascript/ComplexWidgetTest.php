@@ -337,11 +337,14 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     // @todo Why don't i need to open level 3? Auto-opened?
 
     // Open level 3 ADD form.
+    $assert_session->waitForElement('xpath', $first_add_new_node_button_xpath);
+    $this->htmlOutput();
     $assert_session->elementExists('xpath', $first_add_new_node_button_xpath)->press();
     $this->htmlOutput();
 
     // Fill in and save level 3 IEF form.
-    $this->assertNotEmpty($assert_session->waitForElement('xpath', $double_nested_title_field_xpath));
+    $assert_session->waitForElement('xpath', $double_nested_title_field_xpath);
+    $this->htmlOutput();
     $assert_session->elementExists('xpath', $double_nested_title_field_xpath)->setValue('Level 3.1');
     $assert_session->elementExists('xpath', $first_create_node_button_xpath)->press();
     $this->htmlOutput();
@@ -349,9 +352,12 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
 
     // Fill in and save level 2 IEF form.
     $assert_session->waitForElement('xpath', $nested_title_field_xpath)->setValue('Level 2');
+    $this->htmlOutput();
     $assert_session->elementExists('xpath', $first_create_node_button_xpath)->press();
     $this->htmlOutput();
-    $this->assertNotEmpty($assert_session->waitForElement('xpath', $first_edit_button_xpath));
+    $assert_session->waitForElement('xpath', $first_edit_button_xpath);
+    $this->htmlOutput();
+    $assert_session->elementExists('xpath', $first_edit_button_xpath);
     $this->htmlOutput();
 
     // Open level 2 EDIT form.
