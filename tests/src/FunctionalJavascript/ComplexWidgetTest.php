@@ -347,7 +347,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $this->htmlOutput();
     $assert_session->elementExists('xpath', $double_nested_title_field_xpath)->setValue('Level 3.1');
     $assert_session->elementExists('xpath', $first_create_node_button_xpath)->press();
-    $this->htmlOutput();
+    $this->htmlOutput($page->getHtml());
     // @todo Why don't i see an edit button?
 
     // Fill in and save level 2 IEF form.
