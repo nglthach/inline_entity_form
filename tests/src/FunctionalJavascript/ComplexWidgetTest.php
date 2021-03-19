@@ -957,13 +957,22 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
         ->setValue($nested_title);
       $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
         ->setValue($double_nested_title);
+
+      // Close all subforms.
       $page->pressButton('Create node 3');
       $assert_session->waitForButton('Add new node 3');
-      $this->htmlOutput();
       $page->pressButton('Create node 2');
       $assert_session->waitForButton('Add new node 2');
-      $this->htmlOutput();
-      // @todo
+
+      // Re-open all subforms and edit node 3 title.
+      $page->pressButton('Edit');
+      $assert_session->waitForButton('Add new node 3');
+      $page->pressButton('Edit');
+      $assert_session->waitForButton('Create node 3');
+      $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
+        ->setValue("Edited $double_nested_title");
+
+      $page->pressButton('Save');
     }
   }
 
