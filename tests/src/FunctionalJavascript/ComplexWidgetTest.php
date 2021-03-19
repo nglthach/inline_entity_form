@@ -930,4 +930,41 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     }
   }
 
+  /**
+   * Tests that create and edit of nested data won#t clash.
+   *
+   * When creating, then editing a nested IEF, the internal widget state must
+   * use the same IEF ID on create and edit. Otherwise on saving, the entity
+   * will be saved twice, and cause a WSOD.
+   */
+  public function testNestedCreateAndEditWontClash() {
+    // Get the xpath selectors for the input fields in this test.
+    $top_title_field_xpath = $this->getXpathForNthInputByLabelText('Title', 1);
+    $nested_title_field_xpath = $this->getXpathForNthInputByLabelText('Title', 2);
+    $double_nested_title_field_xpath = $this->getXpathForNthInputByLabelText('Title', 3);
+
+    $page = $this->getSession()->getPage();
+    $assert_session = $this->assertSession();
+    foreach ([FALSE, TRUE] as $required) {
+      $this->setupNestedComplexForm($required);
+      $required_string = ($required) ? ' required' : ' unrequired';
+      $double_nested_title = 'Drain within a drain' . $required_string;
+      $nested_title = 'Drain' . $required_string;
+      $top_level_title = 'Rationality' . $required_string;
+      $assert_session->elementExists('xpath', $top_title_field_xpath)
+        ->setValue($top_level_title);
+      $assert_session->elementExists('xpath', $nested_title_field_xpath)
+        ->setValue($nested_title);
+      $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
+        ->setValue($double_nested_title);
+      $page->pressButton('Create node 3');
+      $assert_session->waitForButton('Add new node 3');
+      $this->htmlOutput();
+      $page->pressButton('Create node 2');
+      $assert_session->waitForButton('Add new node 2');
+      $this->htmlOutput();
+      // @todo
+    }
+  }
+
 }
