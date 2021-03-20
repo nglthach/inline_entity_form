@@ -945,6 +945,8 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $nested_title_field_xpath = $this->getXpathForNthInputByLabelText('Title', 2);
     $double_nested_title_field_xpath = $this->getXpathForNthInputByLabelText('Title', 3);
 
+    $second_edit_button_xpath = $this->getXpathForButtonWithValue('Edit', 2);
+
     $page = $this->getSession()->getPage();
     $assert_session = $this->assertSession();
 
@@ -1005,7 +1007,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $this->htmlOutput();
 
     // Re-open all subforms and add a second node 2a_3a.
-    $page->pressButton('Edit');
+    $this->waitForButton($second_edit_button_xpath)->press();
     $this->waitForButton('Update node 2');
     $page->pressButton('Add new node 3');
     $this->waitForButton('Create node 3');
