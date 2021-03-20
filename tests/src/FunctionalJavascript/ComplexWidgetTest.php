@@ -1029,6 +1029,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $element = $this->assertSession()->waitForElement('named', ['button', $locator], $timeout);
     if (!$element) {
       $this->htmlOutput();
+      $this->assertNotNull($element);
     }
     return $element;
   }
@@ -1040,6 +1041,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $element = $this->assertSession()->waitForElementRemoved('named', ['button', $locator], $timeout);
     if (!$element) {
       $this->htmlOutput();
+      $this->assertNotNull($element);
     }
     return $element;
   }
