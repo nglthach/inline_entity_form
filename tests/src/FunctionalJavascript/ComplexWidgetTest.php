@@ -965,19 +965,21 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
       $page->pressButton('Create node 2');
       $assert_session->waitForButton('Add new node 2');
 
-      // Re-open all subforms and edit node 3 title.
+      // Re-open all subforms and add a second node 3.
       $page->pressButton('Edit');
-      $assert_session->waitForButton('Add new node 3');
-      $page->pressButton('Edit');
-      $assert_session->waitForButton('Update node 3');
+      $assert_session->waitForButton('Update node 2');
+      $page->pressButton('Add new node 3');
+      $assert_session->waitForButton('Create node 3');
       $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
-        ->setValue("Edited $double_nested_title");
-      $page->pressButton('Update node 3');
+        ->setValue("Second $double_nested_title");
 
+      // Save everything and assert message.
+      $page->pressButton('Create node 3');
+      $assert_session->waitForButton('Update node 2');
+      $page->pressButton('Update node 2');
+      $assert_session->waitForButton('Add new node 2');
       $page->pressButton('Save');
-      $this->htmlOutput();
       $assert_session->pageTextContains("IEF test nested 1 $top_level_title has been created.");
-      $this->htmlOutput();
     }
   }
 
