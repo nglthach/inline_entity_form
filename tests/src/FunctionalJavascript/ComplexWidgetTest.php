@@ -1007,7 +1007,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $this->htmlOutput();
 
     // Re-open all subforms and add a second node 2a_3a.
-    $this->waitForButton($second_edit_button_xpath)->press();
+    $this->waitForElement('xpath', $second_edit_button_xpath)->press();
     $this->waitForButton('Update node 2');
     $page->pressButton('Add new node 3');
     $this->waitForButton('Create node 3');
@@ -1031,10 +1031,22 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
   }
 
   /**
-   * Wait for button and ensure it exists. Otherwise capture output.
+   * Wait for element and ensure it exists. Otherwise capture output.
    */
-  public function waitForButton($locator, $timeout = 10000) {
-    $element = $this->assertSession()->waitForElement('named', ['button', $locator], $timeout);
+  public function waitForElement($selector, $locator, $timeout = 10000) {
+    $element = $this->assertSession()->waitForElement($selector, $locator, $timeout);
+    if (!$element) {
+      $this->htmlOutput();
+      $this->assertNotNull($element);
+    }
+    return $element;
+  }
+
+  /**
+   * Wait for element and ensure it exists. Otherwise capture output.
+   */
+  public function waitForElementRemoved($selector, $locator, $timeout = 10000) {
+    $element = $this->assertSession()->waitForElementRemoved($selector, $locator, $timeout);
     if (!$element) {
       $this->htmlOutput();
       $this->assertNotNull($element);
@@ -1045,13 +1057,15 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
   /**
    * Wait for button and ensure it exists. Otherwise capture output.
    */
+  public function waitForButton($locator, $timeout = 10000) {
+    return $this->waitForElement('named', ['button', $locator], $timeout);
+  }
+
+  /**
+   * Wait for button and ensure it exists. Otherwise capture output.
+   */
   public function waitForButtonRemoved($locator, $timeout = 10000) {
-    $element = $this->assertSession()->waitForElementRemoved('named', ['button', $locator], $timeout);
-    if (!$element) {
-      $this->htmlOutput();
-      $this->assertNotNull($element);
-    }
-    return $element;
+    return $this->waitForElementRemoved('named', ['button', $locator], $timeout);
   }
 
 }
