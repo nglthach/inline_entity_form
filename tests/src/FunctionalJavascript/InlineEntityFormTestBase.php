@@ -283,7 +283,7 @@ abstract class InlineEntityFormTestBase extends WebDriverTestBase {
    *   The xpath selector for the button to select.
    */
   protected function getXpathForButtonWithValue($value, $index) {
-    return "(//input[@type='submit' and @value='{$value}'][{$index}])";
+    return "(//input[@type='submit' and @value='{$value}'])[{$index}]";
   }
 
   /**
