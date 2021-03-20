@@ -950,16 +950,17 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
 
     $this->setupNestedComplexForm($required);
     $required_string = ($required) ? ' required' : ' unrequired';
-    $double_nested_title = 'Drain within a drain' . $required_string;
-    $nested_title = 'Drain' . $required_string;
-    $top_level_title = 'Rationality' . $required_string;
+    $title_1 = 'Rationality' . $required_string;
+    $title_1_2 = 'Drain' . $required_string;
+    $title_1_2_3 = 'Drain within a drain' . $required_string;
+    $title_i_2_3a = "Drone within a drain";
 
     $assert_session->elementExists('xpath', $top_title_field_xpath)
-      ->setValue($top_level_title);
+      ->setValue($title_1);
     $assert_session->elementExists('xpath', $nested_title_field_xpath)
-      ->setValue($nested_title);
+      ->setValue($title_1_2);
     $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
-      ->setValue($double_nested_title);
+      ->setValue($title_1_2_3);
 
     // Close all subforms.
     $page->pressButton('Create node 3');
@@ -973,14 +974,14 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $page->pressButton('Add new node 3');
     $this->assertNotNull($assert_session->waitForButton('Create node 3'));
     $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
-      ->setValue("Second $double_nested_title");
+      ->setValue($title_i_2_3a);
 
     // Save everything and assert message.
     $page->pressButton('Create node 3');
     $this->assertNotNull($assert_session->waitForButton('Add new node 3'));
     $page->pressButton('Save');
     $this->htmlOutput();
-    $assert_session->pageTextContains("IEF test nested 1 $top_level_title has been created.");
+    $assert_session->pageTextContains("IEF test nested 1 $title_1 has been created.");
   }
 
   public function simpleFalseTrueDataProvider() {
