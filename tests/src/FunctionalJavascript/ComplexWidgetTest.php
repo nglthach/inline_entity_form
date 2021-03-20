@@ -972,6 +972,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
       $assert_session->waitForButton('Create node 3');
       $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
         ->setValue("Second $double_nested_title");
+      $this->htmlOutput();
 
       // Save everything and assert message.
       $page->pressButton('Create node 3');
@@ -979,6 +980,7 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
       $page->pressButton('Update node 2');
       $assert_session->waitForButton('Add new node 2');
       $page->pressButton('Save');
+      $this->htmlOutput();
       $assert_session->pageTextContains("IEF test nested 1 $top_level_title has been created.");
     }
   }
