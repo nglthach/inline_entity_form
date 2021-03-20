@@ -954,6 +954,9 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $title_1_2 = 'Drain' . $required_string;
     $title_1_2_3 = 'Drain within a drain' . $required_string;
     $title_i_2_3a = "Drone within a drain";
+    $title_1_2a = 'Drone' . $required_string;
+    $title_1_2a_3 = 'Drain within a drone' . $required_string;
+    $title_i_2a_3a = "Drone within a drain";
 
     $assert_session->elementExists('xpath', $top_title_field_xpath)
       ->setValue($title_1);
@@ -975,10 +978,36 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $this->assertNotNull($assert_session->waitForButton('Create node 3'));
     $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
       ->setValue($title_i_2_3a);
-
-    // Save everything and assert message.
     $page->pressButton('Create node 3');
     $this->assertNotNull($assert_session->waitForButton('Add new node 3'));
+
+    // Repeat. Add node 2a and 2a_3
+    $page->pressButton('Add new node 2');
+    $this->assertNotNull($assert_session->waitForButton('Create node 2'));
+    $page->pressButton('Add new node 3');
+    $this->assertNotNull($assert_session->waitForButton('Create node 3'));
+    $assert_session->elementExists('xpath', $nested_title_field_xpath)
+      ->setValue($title_1_2a);
+    $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
+      ->setValue($title_1_2a_3);
+
+    // Close all subforms.
+    $page->pressButton('Create node 3');
+    $this->assertNotNull($assert_session->waitForButton('Add new node 3'));
+    $page->pressButton('Create node 2');
+    $this->assertNotNull($assert_session->waitForButton('Add new node 2'));
+
+    // Re-open all subforms and add a second node 2a_3a.
+    $page->pressButton('Edit');
+    $this->assertNotNull($assert_session->waitForButton('Update node 2'));
+    $page->pressButton('Add new node 3');
+    $this->assertNotNull($assert_session->waitForButton('Create node 3'));
+    $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
+      ->setValue($title_i_2a_3a);
+    $page->pressButton('Create node 3');
+    $this->assertNotNull($assert_session->waitForButton('Add new node 3'));
+
+    // Save everything and assert message.
     $page->pressButton('Save');
     $this->htmlOutput();
     $assert_session->pageTextContains("IEF test nested 1 $title_1 has been created.");
