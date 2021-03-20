@@ -951,28 +951,42 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
       $double_nested_title = 'Drain within a drain' . $required_string;
       $nested_title = 'Drain' . $required_string;
       $top_level_title = 'Rationality' . $required_string;
+
       $assert_session->elementExists('xpath', $top_title_field_xpath)
         ->setValue($top_level_title);
       $assert_session->elementExists('xpath', $nested_title_field_xpath)
         ->setValue($nested_title);
       $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
         ->setValue($double_nested_title);
+      $this->htmlOutput();
 
       // Close all subforms.
       $page->pressButton('Create node 3');
+      $this->htmlOutput();
       $assert_session->waitForButton('Add new node 3');
+      $this->htmlOutput();
       $page->pressButton('Create node 2');
+      $this->htmlOutput();
       $assert_session->waitForButton('Add new node 2');
+      $this->htmlOutput();
 
       // Re-open all subforms and edit node 3 title.
       $page->pressButton('Edit');
+      $this->htmlOutput();
       $assert_session->waitForButton('Add new node 3');
+      $this->htmlOutput();
       $page->pressButton('Edit');
-      $assert_session->waitForButton('Create node 3');
+      $this->htmlOutput();
+      $assert_session->waitForButton('Update node 3');
+      $this->htmlOutput();
       $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
         ->setValue("Edited $double_nested_title");
+      $this->htmlOutput();
+      $page->pressButton('Update node 3');
+      $this->htmlOutput();
 
       $page->pressButton('Save');
+      $this->htmlOutput();
     }
   }
 
