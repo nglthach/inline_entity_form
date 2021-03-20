@@ -982,11 +982,11 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
 
     // Save everything and assert message.
     $page->pressButton('Create node 3');
-    $assert_session->waitForButton('Update node 2');
     $this->htmlOutput();
-    $page->pressButton('Update node 2');
-    $this->assertNotNull($assert_session->waitForButton('Add new node 2'));
+    $this->assertNotNull($assert_session->waitForButton('Add new node 3'));
     $this->htmlOutput();
+    //$page->pressButton('Update node 2');
+    // $this->assertNotNull($assert_session->waitForButton('Add new node 2'));
     $page->pressButton('Save');
     $this->htmlOutput();
     $assert_session->pageTextContains("IEF test nested 1 $top_level_title has been created.");
