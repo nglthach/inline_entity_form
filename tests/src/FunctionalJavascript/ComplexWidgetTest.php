@@ -995,17 +995,26 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $page->pressButton('Create node 3');
     $this->assertNotNull($assert_session->waitForButton('Add new node 3'));
     $page->pressButton('Create node 2');
+    $this->htmlOutput();
     $this->assertNotNull($assert_session->waitForButton('Add new node 2'));
+    $this->htmlOutput();
 
     // Re-open all subforms and add a second node 2a_3a.
     $page->pressButton('Edit');
+    $this->htmlOutput();
     $this->assertNotNull($assert_session->waitForButton('Update node 2'));
+    $this->htmlOutput();
     $page->pressButton('Add new node 3');
+    $this->htmlOutput();
     $this->assertNotNull($assert_session->waitForButton('Create node 3'));
+    $this->htmlOutput();
     $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
       ->setValue($title_i_2a_3a);
+    $this->htmlOutput();
     $page->pressButton('Create node 3');
+    $this->htmlOutput();
     $this->assertNotNull($assert_session->waitForButton('Add new node 3'));
+    $this->htmlOutput();
 
     // Save everything and assert message.
     $page->pressButton('Save');
