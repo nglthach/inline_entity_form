@@ -166,7 +166,7 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
    */
   protected function makeIefId(array $parents) {
     $iefId = implode('-', $parents);
-    $iefId = preg_replace('#-inline_entity_form-entities-(0)-form-#', '-$1-', $iefId);
+    $iefId = preg_replace('#-inline_entity_form-entities-([0-9]+)-form-#', '-$1-', $iefId);
     return $iefId;
   }
 
