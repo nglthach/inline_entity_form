@@ -996,6 +996,8 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $this->assertNotNull($assert_session->waitForButton('Add new node 3'));
     $page->pressButton('Create node 2');
     $this->htmlOutput();
+    $assert_session->waitForButton('Add new node 2'); //
+    $this->htmlOutput();
     $this->assertNotNull($assert_session->waitForButton('Add new node 2'));
     $this->htmlOutput();
 
