@@ -936,8 +936,10 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
    * When creating, then editing a nested IEF, the internal widget state must
    * use the same IEF ID on create and edit. Otherwise on saving, the entity
    * will be saved twice, and cause a WSOD.
+   *
+   * @dataProvider simpleFalseTrueDataProvider
    */
-  public function testNestedCreateAndEditWontClash() {
+  public function testNestedCreateAndEditWontClash(bool $required) {
     // Get the xpath selectors for the input fields in this test.
     $top_title_field_xpath = $this->getXpathForNthInputByLabelText('Title', 1);
     $nested_title_field_xpath = $this->getXpathForNthInputByLabelText('Title', 2);
@@ -945,50 +947,55 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
 
     $page = $this->getSession()->getPage();
     $assert_session = $this->assertSession();
-    foreach ([FALSE, TRUE] as $required) {
-      $this->setupNestedComplexForm($required);
-      $required_string = ($required) ? ' required' : ' unrequired';
-      $double_nested_title = 'Drain within a drain' . $required_string;
-      $nested_title = 'Drain' . $required_string;
-      $top_level_title = 'Rationality' . $required_string;
 
-      $assert_session->elementExists('xpath', $top_title_field_xpath)
-        ->setValue($top_level_title);
-      $assert_session->elementExists('xpath', $nested_title_field_xpath)
-        ->setValue($nested_title);
-      $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
-        ->setValue($double_nested_title);
-      $this->htmlOutput();
+    $this->setupNestedComplexForm($required);
+    $required_string = ($required) ? ' required' : ' unrequired';
+    $double_nested_title = 'Drain within a drain' . $required_string;
+    $nested_title = 'Drain' . $required_string;
+    $top_level_title = 'Rationality' . $required_string;
 
-      // Close all subforms.
-      $page->pressButton('Create node 3');
-      $this->assertNotNull($assert_session->waitForButton('Add new node 3'));
-      $this->htmlOutput();
-      $page->pressButton('Create node 2');
-      $this->assertNotNull($assert_session->waitForButton('Add new node 2'));
-      $this->htmlOutput();
+    $assert_session->elementExists('xpath', $top_title_field_xpath)
+      ->setValue($top_level_title);
+    $assert_session->elementExists('xpath', $nested_title_field_xpath)
+      ->setValue($nested_title);
+    $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
+      ->setValue($double_nested_title);
+    $this->htmlOutput();
 
-      // Re-open all subforms and add a second node 3.
-      $page->pressButton('Edit');
-      $this->assertNotNull($assert_session->waitForButton('Update node 2'));
-      $this->htmlOutput();
-      $page->pressButton('Add new node 3');
-      $this->assertNotNull($assert_session->waitForButton('Create node 3'));
-      $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
-        ->setValue("Second $double_nested_title");
-      $this->htmlOutput();
+    // Close all subforms.
+    $page->pressButton('Create node 3');
+    $this->assertNotNull($assert_session->waitForButton('Add new node 3'));
+    $this->htmlOutput();
+    $page->pressButton('Create node 2');
+    $this->assertNotNull($assert_session->waitForButton('Add new node 2'));
+    $this->htmlOutput();
 
-      // Save everything and assert message.
-      $page->pressButton('Create node 3');
-      $assert_session->waitForButton('Update node 2');
-      $this->htmlOutput();
-      $page->pressButton('Update node 2');
-      $this->assertNotNull($assert_session->waitForButton('Add new node 2'));
-      $this->htmlOutput();
-      $page->pressButton('Save');
-      $this->htmlOutput();
-      $assert_session->pageTextContains("IEF test nested 1 $top_level_title has been created.");
-    }
+    // Re-open all subforms and add a second node 3.
+    $page->pressButton('Edit');
+    $this->assertNotNull($assert_session->waitForButton('Update node 2'));
+    $this->htmlOutput();
+    $page->pressButton('Add new node 3');
+    $this->assertNotNull($assert_session->waitForButton('Create node 3'));
+    $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
+      ->setValue("Second $double_nested_title");
+    $this->htmlOutput();
+
+    // Save everything and assert message.
+    $page->pressButton('Create node 3');
+    $assert_session->waitForButton('Update node 2');
+    $this->htmlOutput();
+    $page->pressButton('Update node 2');
+    $this->assertNotNull($assert_session->waitForButton('Add new node 2'));
+    $this->htmlOutput();
+    $page->pressButton('Save');
+    $this->htmlOutput();
+    $assert_session->pageTextContains("IEF test nested 1 $top_level_title has been created.");
   }
 
+  public function simpleFalseTrueDataProvider() {
+    return [
+      [FALSE],
+      [TRUE],
+    ];
+  }
 }
