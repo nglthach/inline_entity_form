@@ -984,9 +984,9 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $this->waitForButtonRemoved('Update node 2');
 
     // Repeat. Add node 2a and 2a_3
+    $page->pressButton('Add new node 2');
+    $this->waitForButton('Create node 2');
     if (!$required) {
-      $page->pressButton('Add new node 2');
-      $this->waitForButton('Create node 2');
       $page->pressButton('Add new node 3');
       $this->waitForButton('Create node 3');
     }
