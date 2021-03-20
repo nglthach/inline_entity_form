@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\inline_entity_form\FunctionalJavascript;
 
+use Behat\Mink\Element\NodeElement;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\Tests\TestFileCreationTrait;
@@ -960,39 +961,38 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $title_1_2a_3 = 'Drain within a drone' . $required_string;
     $title_i_2a_3a = "Drone within a drain" . $required_string;
 
-    $assert_session->elementExists('xpath', $top_title_field_xpath)
+    $this->elementWithXpath($top_title_field_xpath)
       ->setValue($title_1);
-    $assert_session->elementExists('xpath', $nested_title_field_xpath)
+    $this->elementWithXpath($nested_title_field_xpath)
       ->setValue($title_1_2);
-    $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
+    $this->elementWithXpath($double_nested_title_field_xpath)
       ->setValue($title_1_2_3);
 
     // Close all subforms.
-    $page->pressButton('Create node 3');
-    $this->waitForButton('Add new node 3');
-    $page->pressButton('Create node 2');
-    $this->waitForButton('Add new node 2');
+    $this->elementWithXpath($this->buttonXpath('Create node 3'))->press();
+    $this->waitForXpath($this->buttonXpath('Add new node 3'));
+    $this->elementWithXpath($this->buttonXpath('Create node 2'))->press();
+    $this->waitForXpath($this->buttonXpath('Add new node 2'));
 
     // Re-open all subforms and add a second node 3.
-    $page->pressButton('Edit');
-    $this->waitForButton('Update node 2');
-    $page->pressButton('Add new node 3');
+    $this->elementWithXpath($this->buttonXpath('Edit'))->press();
+    $this->waitForXpath($this->buttonXpath('Update node 2'));
+    $this->elementWithXpath($this->buttonXpath('Add new node 3'))->press();
     $this->assertNotNull($assert_session->waitForButton('Create node 3'));
     $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
       ->setValue($title_i_2_3a);
-    $page->pressButton('Create node 3');
-    $this->waitForButton('Add new node 3');
-    $page->pressButton('Update node 2');
-    $this->waitForButtonRemoved('Update node 2');
+    $this->elementWithXpath($this->buttonXpath('Create node 3'))->press();
+    $this->waitForXpath($this->buttonXpath('Add new node 3'));
+    $this->elementWithXpath($this->buttonXpath('Update node 2'))->press();
+    $this->waitForXpathRemoved($this->buttonXpath('Update node 2'));
 
     // Repeat. Add node 2a and 2a_3
-    $page->pressButton('Add new node 2');
-    $this->waitForButton('Create node 2');
+    $this->elementWithXpath($this->buttonXpath('Add new node 2'))->press();
+    $this->waitForXpath($this->buttonXpath('Create node 2'));
     if (!$required) {
-      $page->pressButton('Add new node 3');
-      $this->waitForButton('Create node 3');
+      $this->elementWithXpath($this->buttonXpath('Add new node 3'))->press();
+      $this->waitForXpath($this->buttonXpath('Create node 3'));
     }
-    $this->htmlOutput();
 
     $assert_session->elementExists('xpath', $nested_title_field_xpath)
       ->setValue($title_1_2a);
@@ -1000,29 +1000,30 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
       ->setValue($title_1_2a_3);
 
     // Close all subforms.
-    $page->pressButton('Create node 3');
-    $this->waitForButton('Add new node 3');
-    $page->pressButton('Create node 2');
-    $this->waitForButtonRemoved('Create node 2');
-    $this->htmlOutput();
+    $this->elementWithXpath($this->buttonXpath('Create node 3'))->press();
+    $this->waitForXpath($this->buttonXpath('Add new node 3'));
+    $this->elementWithXpath($this->buttonXpath('Create node 2'))->press();
+    $this->waitForXpathRemoved($this->buttonXpath('Create node 2'));
 
     // Re-open all subforms and add a second node 2a_3a.
-    $this->waitForElement('xpath', $second_edit_button_xpath)->press();
-    $this->waitForButton('Update node 2');
-    $page->pressButton('Add new node 3');
-    $this->waitForButton('Create node 3');
+    $this->waitForXpath($second_edit_button_xpath)->press();
+    $this->waitForXpath($this->buttonXpath('Update node 2'));
+    $this->elementWithXpath($this->buttonXpath('Add new node 3'))->press();
+    $this->waitForXpath($this->buttonXpath('Create node 3'));
     $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
       ->setValue($title_i_2a_3a);
-    $page->pressButton('Create node 3');
-    $this->waitForButton('Add new node 3');
+    $this->elementWithXpath($this->buttonXpath('Create node 3'))->press();
+    $this->waitForXpath($this->buttonXpath('Add new node 3'));
 
     // Save everything and assert message.
-    $this->htmlOutput();
-    $page->pressButton('Save');
+    $this->elementWithXpath($this->buttonXpath('Save'))->press();
     $this->htmlOutput();
     $assert_session->pageTextContains("IEF test nested 1 $title_1 has been created.");
   }
 
+  /**
+   * Data provider: FALSE, TRUE.
+   */
   public function simpleFalseTrueDataProvider() {
     return [
       [FALSE],
@@ -1031,10 +1032,29 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
   }
 
   /**
-   * Wait for element and ensure it exists. Otherwise capture output.
+   * Assert and return an element via XPath. On fail, save output and throw.
+   *
+   * @param string $xpath
+   *   The XPath.
+   * @return \Behat\Mink\Element\NodeElement
+   *   The element.
    */
-  public function waitForElement($selector, $locator, $timeout = 10000) {
-    $element = $this->assertSession()->waitForElement($selector, $locator, $timeout);
+  public function elementWithXpath(string $xpath): NodeElement {
+    return $this->waitForXpath($xpath, 0);
+  }
+
+  /**
+   * Wait, assert, and return an element via XPath. On fail, save output and throw.
+   *
+   * @param string $xpath
+   *   The XPath.
+   * @param int $timeout
+   *   The timeout in milliseconds.
+   * @return \Behat\Mink\Element\NodeElement
+   *   The element.
+   */
+  public function waitForXpath(string $xpath, int $timeout = 10000): NodeElement {
+    $element = $this->assertSession()->waitForElement('xpath', $xpath, $timeout);
     if (!$element) {
       $this->htmlOutput();
       $this->assertNotNull($element);
@@ -1043,29 +1063,36 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
   }
 
   /**
-   * Wait for element and ensure it exists. Otherwise capture output.
+   * Wait and assert removal of an element via XPath. On fail, save output and throw.
+   *
+   * @param string $xpath
+   *   The XPath.
+   * @param int $timeout
+   *   The timeout in milliseconds.
+   * @return bool
+   *   Returna always true (else throws).
    */
-  public function waitForElementRemoved($selector, $locator, $timeout = 10000) {
-    $element = $this->assertSession()->waitForElementRemoved($selector, $locator, $timeout);
-    if (!$element) {
+  public function waitForXpathRemoved(string $xpath, int $timeout = 10000): bool {
+    $removed = $this->assertSession()->waitForElementRemoved('xpath', $xpath, $timeout);
+    if (!$removed) {
       $this->htmlOutput();
-      $this->assertNotNull($element);
+      $this->assert($removed);
     }
-    return $element;
+    return $removed;
   }
 
   /**
-   * Wait for button and ensure it exists. Otherwise capture output.
+   * Get xpath for a button.
+   *
+   * @param string $label
+   *  The button's label.
+   * @param int $index
+   *   The button's index, defaults to 1.
+   * @return string
+   *   The XPath.
    */
-  public function waitForButton($locator, $timeout = 10000) {
-    return $this->waitForElement('named', ['button', $locator], $timeout);
-  }
-
-  /**
-   * Wait for button and ensure it exists. Otherwise capture output.
-   */
-  public function waitForButtonRemoved($locator, $timeout = 10000) {
-    return $this->waitForElementRemoved('named', ['button', $locator], $timeout);
+  protected function buttonXpath(string $label, int $index = 1): string {
+    return $this->getXpathForButtonWithValue($label, $index);
   }
 
 }
