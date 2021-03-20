@@ -953,10 +953,10 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
     $title_1 = 'Rationality' . $required_string;
     $title_1_2 = 'Drain' . $required_string;
     $title_1_2_3 = 'Drain within a drain' . $required_string;
-    $title_i_2_3a = "Drone within a drain";
+    $title_i_2_3a = "Drone within a drain" . $required_string;
     $title_1_2a = 'Drone' . $required_string;
     $title_1_2a_3 = 'Drain within a drone' . $required_string;
-    $title_i_2a_3a = "Drone within a drain";
+    $title_i_2a_3a = "Drone within a drain" . $required_string;
 
     $assert_session->elementExists('xpath', $top_title_field_xpath)
       ->setValue($title_1);
@@ -967,31 +967,28 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
 
     // Close all subforms.
     $page->pressButton('Create node 3');
-    $this->assertNotNull($assert_session->waitForButton('Add new node 3'));
+    $this->waitForButton('Add new node 3');
     $page->pressButton('Create node 2');
-    $this->assertNotNull($assert_session->waitForButton('Add new node 2'));
+    $this->waitForButton('Add new node 2');
 
     // Re-open all subforms and add a second node 3.
     $page->pressButton('Edit');
-    $this->assertNotNull($assert_session->waitForButton('Update node 2'));
+    $this->waitForButton('Update node 2');
     $page->pressButton('Add new node 3');
     $this->assertNotNull($assert_session->waitForButton('Create node 3'));
     $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
       ->setValue($title_i_2_3a);
     $page->pressButton('Create node 3');
-    $this->assertNotNull($assert_session->waitForButton('Add new node 3'));
+    $this->waitForButton('Add new node 3');
     $this->htmlOutput();
     $page->pressButton('Update node 2');
-    $this->assertNotNull($assert_session->waitForButton('Add new node 2'));
-    $this->htmlOutput();
+    $this->waitForButtonRemoved('Update node 2');
 
     // Repeat. Add node 2a and 2a_3
     $page->pressButton('Add new node 2');
-    $this->assertNotNull($assert_session->waitForButton('Create node 2'));
-    $this->htmlOutput();
+    $this->waitForButton('Create node 2');
     $page->pressButton('Add new node 3');
-    $this->assertNotNull($assert_session->waitForButton('Create node 3'));
-    $this->htmlOutput();
+    $this->waitForButton('Create node 3');
     $assert_session->elementExists('xpath', $nested_title_field_xpath)
       ->setValue($title_1_2a);
     $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
@@ -999,34 +996,22 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
 
     // Close all subforms.
     $page->pressButton('Create node 3');
-    $this->assertNotNull($assert_session->waitForButton('Add new node 3'));
+    $this->waitForButton('Add new node 3');
     $page->pressButton('Create node 2');
-    $this->htmlOutput();
-    $assert_session->waitForButton('Add new node 2'); //
-    $this->htmlOutput();
-    $this->assertNotNull($assert_session->waitForButton('Add new node 2'));
-    $this->htmlOutput();
+    $this->waitForButtonRemoved('Create node 2');
 
     // Re-open all subforms and add a second node 2a_3a.
     $page->pressButton('Edit');
-    $this->htmlOutput();
-    $this->assertNotNull($assert_session->waitForButton('Update node 2'));
-    $this->htmlOutput();
+    $this->waitForButton('Update node 2');
     $page->pressButton('Add new node 3');
-    $this->htmlOutput();
-    $this->assertNotNull($assert_session->waitForButton('Create node 3'));
-    $this->htmlOutput();
+    $this->waitForButton('Create node 3');
     $assert_session->elementExists('xpath', $double_nested_title_field_xpath)
       ->setValue($title_i_2a_3a);
-    $this->htmlOutput();
     $page->pressButton('Create node 3');
-    $this->htmlOutput();
-    $this->assertNotNull($assert_session->waitForButton('Add new node 3'));
-    $this->htmlOutput();
+    $this->waitForButton('Add new node 3');
 
     // Save everything and assert message.
     $page->pressButton('Save');
-    $this->htmlOutput();
     $assert_session->pageTextContains("IEF test nested 1 $title_1 has been created.");
   }
 
@@ -1036,4 +1021,27 @@ class ComplexWidgetTest extends InlineEntityFormTestBase {
       [TRUE],
     ];
   }
+
+  /**
+   * Wait for button and ensure it exists. Otherwise capture output.
+   */
+  public function waitForButton($locator, $timeout = 10000) {
+    $element = $this->assertSession()->waitForElement('named', ['button', $locator], $timeout);
+    if (!$element) {
+      $this->htmlOutput();
+    }
+    return $element;
+  }
+
+  /**
+   * Wait for button and ensure it exists. Otherwise capture output.
+   */
+  public function waitForButtonRemoved($locator, $timeout = 10000) {
+    $element = $this->assertSession()->waitForElementRemoved('named', ['button', $locator], $timeout);
+    if (!$element) {
+      $this->htmlOutput();
+    }
+    return $element;
+  }
+
 }
