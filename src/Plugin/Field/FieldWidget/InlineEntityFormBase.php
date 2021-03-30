@@ -154,6 +154,9 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
    * We need the IEF form ID to reflect the tree structure of IEFs, so that
    * the form state keys can be sorted to ensure inside-out saving of entities.
    *
+   * Also, "add" and "edit" IEFs have different array parents, which messes up
+   * form state, so we fixup this here with a, errrm, pragmatic hack.
+   *
    * @see \Drupal\inline_entity_form\WidgetSubmit::doSubmit
    *
    * @param string[] $parents
@@ -162,7 +165,9 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
    *   The resulting inline entity form ID.
    */
   protected function makeIefId(array $parents) {
-    return implode('-', $parents);
+    $iefId = implode('-', $parents);
+    $iefId = preg_replace('#-inline_entity_form-entities-([0-9]+)-form-#', '-$1-', $iefId);
+    return $iefId;
   }
 
   /**
