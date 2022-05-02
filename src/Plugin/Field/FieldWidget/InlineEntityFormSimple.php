@@ -134,11 +134,12 @@ class InlineEntityFormSimple extends InlineEntityFormBase {
     $submitted_values = $form_state->getValue($parents);
     $values = [];
     foreach ($items as $delta => $value) {
-      $element = NestedArray::getValue($form, [$field_name, 'widget', $delta]);
-      /** @var \Drupal\Core\Entity\EntityInterface $entity */
-      $entity = $element['inline_entity_form']['#entity'];
-      $weight = isset($submitted_values[$delta]['_weight']) ? $submitted_values[$delta]['_weight'] : 0;
-      $values[$weight] = ['entity' => $entity];
+      if ($element = NestedArray::getValue($form, [$field_name, 'widget', $delta])) {
+        /** @var \Drupal\Core\Entity\EntityInterface $entity */
+        $entity = $element['inline_entity_form']['#entity'];
+        $weight = isset($submitted_values[$delta]['_weight']) ? $submitted_values[$delta]['_weight'] : 0;
+        $values[$weight] = ['entity' => $entity];
+      }
     }
 
     // Sort items base on weights.
