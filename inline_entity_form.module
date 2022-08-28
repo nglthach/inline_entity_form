@@ -209,7 +209,7 @@ function inline_entity_form_field_widget_info() {
   $widgets = array();
 
   $widgets['inline_entity_form_single'] = array(
-    'label' => t('Inline entity form - Single value'),
+    'label' => t('Inline entity form - Single required value'),
     'field types' => array('commerce_line_item_reference', 'commerce_product_reference', 'entityreference'),
     'settings' => array(
       'fields' => array(),
@@ -221,7 +221,7 @@ function inline_entity_form_field_widget_info() {
     ),
   );
   $widgets['inline_entity_form'] = array(
-    'label' => t('Inline entity form - Multiple values'),
+    'label' => t('Inline entity form - Multiple optional values'),
     'field types' => array('commerce_line_item_reference', 'commerce_product_reference', 'entityreference'),
     'settings' => array(
       'fields' => array(),
@@ -508,6 +508,12 @@ function inline_entity_form_field_widget_form(&$form, &$form_state, $field, $ins
   // The "Single value" widget assumes it is operating on a required single
   // value reference field with 1 allowed bundle.
   if ($widget['type'] == 'inline_entity_form_single') {
+    $element['description'] = array(
+      '#markup' => t('This widget only allows one entity to be added and the entity cannot be removed once added. If the entity is to be optional then use the "Multiple optional values" widget instead.'),
+      '#prefix' => '<p>',
+      '#suffix' => '</p>',
+    );
+
     // Intentionally not using $settings['create_bundles'] here because this
     // widget doesn't care about permissions because of its use case.
     $bundle = reset($settings['bundles']);
@@ -546,6 +552,12 @@ function inline_entity_form_field_widget_form(&$form, &$form_state, $field, $ins
     $element['form']['actions']['#access'] = FALSE;
   }
   else {
+    $element['description'] = array(
+      '#markup' => t('This widget allows multiple entities to be controlled and the entities may be removed once added. If the entity is to be required then use the "Single required value" widget instead.'),
+      '#prefix' => '<p>',
+      '#suffix' => '</p>',
+    );
+
     // Build the "Multiple value" widget.
     $element['#element_validate'] = array('inline_entity_form_update_row_weights');
     // Add the required element marker & validation.
