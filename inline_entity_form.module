@@ -504,6 +504,8 @@ function inline_entity_form_field_widget_form(&$form, &$form_state, $field, $ins
   $entity_count = count($form_state['inline_entity_form'][$ief_id]['entities']);
   $cardinality_reached = ($cardinality > 0 && $entity_count == $cardinality);
 
+  drupal_alter('inline_entity_form_widget_state', $form_state['inline_entity_form'][$ief_id], $form_state);
+
   // Build the appropriate widget.
   // The "Single value" widget assumes it is operating on a required single
   // value reference field with 1 allowed bundle.
