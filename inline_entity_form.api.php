@@ -68,16 +68,14 @@ function hook_inline_entity_form_settings_alter(&$settings, $field, $instance) {
  *   - type: either 'property', 'field' or 'callback' to specify how the data is
  *     defined on the related entity.
  *   - label: the title of the table field's column in the IEF table.
- *   - sanitized: for 'property' type table fields, a boolean indicating whether
- *     or not the data has already been sanitized for output; if not present or
- *     FALSE, theme_inline_entity_form_entity_table() will sanitize the data for
- *     output using check_plain().
- *   - formatter: for 'field' type table fields, the machine-name of the display
- *     formatter to use to render the field data. If this is used, then further
- *     keys will be set in the array passed to field_view_field() as the
- *     $display parameter. This allows any of the settings defined in the field
- *     formatter's hook_field_formatter_info() to be used.
- *   - weight: the sort order of the column in the IEF table.
+ *   - weight: The position of the field relative to other fields.
+ *   Special keys for type 'field', all optional:
+ *   - formatter: The formatter used to display the field, or "hidden".
+ *   - settings: An array passed to the formatter. If empty, defaults are used.
+ *   - delta: If provided, limits the field to just the specified delta.
+ *   Special keys for type 'property', all optional:
+ *   - formatter callback: A formatter callback used to display a property.
+ *   - formatter arguments: Extra arguments to pass to the formatter callback.
  *   - render_callback: for 'callback' type table fields, a function name that
  *     returns a renderable array.
  * @param $context

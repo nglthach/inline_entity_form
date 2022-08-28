@@ -89,6 +89,9 @@ class EntityInlineEntityFormController {
    *   - formatter: The formatter used to display the field, or "hidden".
    *   - settings: An array passed to the formatter. If empty, defaults are used.
    *   - delta: If provided, limits the field to just the specified delta.
+   *   Special keys for type 'property', both optional:
+   *   - formatter callback: A formatter callback used to display a property.
+   *   - formatter arguments: Extra arguments to pass to the formatter callback.
    */
   public function tableFields($bundles) {
     $info = entity_get_info($this->entityType);

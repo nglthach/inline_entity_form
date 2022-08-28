@@ -1756,9 +1756,26 @@ function theme_inline_entity_form_entity_table($variables) {
       $data = '';
       if ($field['type'] == 'property') {
         $property = $wrapper->{$field_name};
-        // label() returns human-readable versions of token and list properties.
-        $data = $property->label() ? $property->label() : $property->value();
-        $data = empty($field['sanitized']) ? check_plain($data) : $data;
+        // Handle formatter callbacks for properties.
+        if (isset($field['formatter callback']) && is_callable($field['formatter callback'])) {
+          $arguments = array($property->value());
+          // If the 'formatter arguments' key is defined, the property value
+          // will be the first argument to the formatter, while the other
+          // arguments will be appended.
+          if (isset($field['formatter arguments']) && is_array($field['formatter arguments'])) {
+            $arguments = array_merge($arguments, $field['formatter arguments']);
+          }
+          $data = call_user_func_array($field['formatter callback'], $arguments);
+        }
+        else {
+          // There's no formatter callback. The $property->label() method
+          // returns human-readable versions for properties that have an
+          // 'options list'.
+          $data = $property->label();
+          if (!$data) {
+            $data = $property->value(array('sanitize' => TRUE));
+          }
+        }
       }
       elseif ($field['type'] == 'field' && isset($entity->{$field_name})) {
         $display = array(
