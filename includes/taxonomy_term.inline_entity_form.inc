@@ -106,9 +106,11 @@ class TaxonomyTermInlineEntityFormController extends EntityInlineEntityFormContr
       $entity->vid = $vocabularies[$entity->vocabulary_machine_name]->vid;
     }
 
+    $entity_values = drupal_array_get_nested_value($form_state['values'], $entity_form['#parents']);
+
     // Separate the description and format.
-    $entity->format = $entity->description['format'];
-    $entity->description = $entity->description['value'];
+    $entity->format = $entity_values['description']['format'];
+    $entity->description = $entity_values['description']['value'];
   }
 
   /**
