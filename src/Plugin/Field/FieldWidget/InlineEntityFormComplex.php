@@ -48,6 +48,13 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
   protected $selectionManager;
 
   /**
+   * The content translation manager.
+   *
+   * @var \Drupal\content_translation\ContentTranslationManagerInterface
+   */
+  protected $contentTranslationManager;
+
+  /**
    * Constructs a InlineEntityFormComplex object.
    *
    * @param string $plugin_id
@@ -70,11 +77,14 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
    *   Module handler service.
    * @param \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface $selection_manager
    *   The selection plugin manager.
+   * @param \Drupal\content_translation\ContentTranslationManagerInterface $translation_manager
+   *   Content translation manager.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, EntityTypeBundleInfoInterface $entity_type_bundle_info, EntityTypeManagerInterface $entity_type_manager, EntityDisplayRepositoryInterface $entity_display_repository, ModuleHandlerInterface $module_handler, SelectionPluginManagerInterface $selection_manager) {
-    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings, $entity_type_bundle_info, $entity_type_manager, $entity_display_repository);
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, EntityTypeBundleInfoInterface $entity_type_bundle_info, EntityTypeManagerInterface $entity_type_manager, EntityDisplayRepositoryInterface $entity_display_repository, ModuleHandlerInterface $module_handler, SelectionPluginManagerInterface $selection_manager, ContentTranslationManagerInterface $translation_manager) {
+    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings, $entity_type_bundle_info, $entity_type_manager, $entity_display_repository, $translation_manager);
     $this->moduleHandler = $module_handler;
     $this->selectionManager = $selection_manager;
+    $this->contentTranslationManager = $translation_manager;
   }
 
   /**
@@ -91,7 +101,8 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
       $container->get('entity_type.manager'),
       $container->get('entity_display.repository'),
       $container->get('module_handler'),
-      $container->get('plugin.manager.entity_reference_selection')
+      $container->get('plugin.manager.entity_reference_selection'),
+      $container->get('content_translation.manager')
     );
   }
 
