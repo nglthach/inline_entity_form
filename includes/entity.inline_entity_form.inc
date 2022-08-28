@@ -339,7 +339,7 @@ class EntityInlineEntityFormController {
     $remove_form['message'] = array(
       '#markup' => '<div>' . t('Are you sure you want to remove %label?', array('%label' => $entity_label)) . '</div>',
     );
-    if (!empty($entity_id) && $this->getSetting('allow_existing')) {
+    if (!empty($entity_id)) {
       $access = entity_access('delete', $this->entityType, $entity);
       if ($access) {
         $labels = $this->labels();
@@ -373,9 +373,9 @@ class EntityInlineEntityFormController {
     if (empty($entity_id)) {
       return IEF_ENTITY_UNLINK;
     }
-    // If existing entities can be referenced, the delete happens only when
-    // specifically requested (the "Permanently delete" checkbox).
-    if ($this->getSetting('allow_existing') && empty($form_values['delete'])) {
+    // The delete happens only when specifically requested (the "Permanently
+    // delete" checkbox).
+    if (empty($form_values['delete'])) {
       return IEF_ENTITY_UNLINK;
     }
 
