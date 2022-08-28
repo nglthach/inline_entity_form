@@ -55,9 +55,16 @@ class NodeInlineEntityFormController extends EntityInlineEntityFormController {
       // The label might be missing if the Title module has replaced it.
       '#weight' => !empty($extra_fields['title']) ? $extra_fields['title']['weight'] : -5,
     );
+
+    if (module_exists('override_node_options')) {
+      $status_access = user_access('override ' . $node->type . ' published option');
+    }
+    else {
+      $status_access = user_access('administer nodes');
+    }
     $entity_form['status'] = array(
       '#type' => 'radios',
-      '#access' => user_access('administer nodes'),
+      '#access' => $status_access,
       '#title' => t('Status'),
       '#default_value' => $node->status,
       '#options' => array(1 => t('Published'), 0 => t('Unpublished')),
