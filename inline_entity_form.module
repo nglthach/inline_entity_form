@@ -918,7 +918,7 @@ function inline_entity_form_update_row_weights($element, &$form_state, $form) {
  */
 function inline_entity_form_entity_form($controller, $entity_form, &$form_state) {
   $labels = $controller->labels();
-  // Build a deta suffix that's appended to button #name keys for uniqueness.
+  // Build a delta suffix that's appended to button #name keys for uniqueness.
   $delta = $entity_form['#ief_id'];
   if ($entity_form['#op'] == 'edit') {
     $delta .= '-' . $entity_form['#ief_row_delta'];
@@ -1160,7 +1160,7 @@ function inline_entity_form_reference_form($controller, $reference_form, &$form_
 function _inline_entity_form_autocomplete_validate($element, &$form_state, $form) {
   $value = '';
   if (!empty($element['#value'])) {
-    // Take "label (entity id)', match the id from parenthesis.
+    // Take "label (entity id)", match the id from parenthesis.
     if (preg_match("/.+\((\d+)\)/", $element['#value'], $matches)) {
       $value = $matches[1];
     }
@@ -1249,7 +1249,7 @@ function inline_entity_form_reference_form_submit($reference_form, &$form_state)
  *   The form array containing the embedded remove form.
  */
 function inline_entity_form_remove_form($controller, $remove_form, &$form_state) {
-  // Build a deta suffix that's appended to button #name keys for uniqueness.
+  // Build a delta suffix that's appended to button #name keys for uniqueness.
   $delta = $remove_form['#ief_id'] . '-' . $remove_form['#ief_row_delta'];
 
   // Retrieve the form provided by the controller.
@@ -1630,7 +1630,7 @@ function inline_entity_form_field_attach_submit($parent_entity_type, $parent_ent
 function inline_entity_form_cleanup_entity_form_state($entity_form, &$form_state) {
   $info = entity_get_info($entity_form['#entity_type']);
   if (empty($info['fieldable'])) {
-    // The entity type is not fieldable, nothing to cleanup.
+    // The entity type is not fieldable, nothing to clean up.
     return;
   }
 

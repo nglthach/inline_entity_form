@@ -641,7 +641,7 @@ class MultipleValuesWidgetTest extends InlineEntityFormTestBase {
   }
 
   /**
-   * Checks that nested IEF entity references can be edit and saved.
+   * Checks that nested IEF entity references can be edited and saved.
    *
    * @param $node
    *  Top level node of type ief_test_nested1 to check.
