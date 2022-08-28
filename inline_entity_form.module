@@ -939,6 +939,12 @@ function inline_entity_form_entity_form($controller, $entity_form, &$form_state)
     );
   }
 
+  // Help message for ief saving data.
+  $help_markup = '<div class="messages warning">' . t('All changes are stored temporarily. You also need to click Save button at the bottom of the page to make your changes permanent.') . '</div>';
+  $entity_form['actions']['help'] = array(
+    '#markup' => $help_markup,
+  );
+
   $entity_form['#element_validate'][] = 'inline_entity_form_entity_form_validate';
   $entity_form['#ief_element_submit'][] = 'inline_entity_form_entity_form_submit';
   // Add the pre_render callback that powers the #fieldset form element key,
