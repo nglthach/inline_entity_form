@@ -338,6 +338,52 @@ function inline_entity_form_settings($field, $instance) {
         $settings['bundles'] = array_values($bundles);
       }
     }
+
+    // Make sure that if using a view for the entity selection only
+    // the bundles which are returned by the view are available to create.
+    if (!empty($field['settings']['handler_settings']['view'])) {
+      $view_name = $field['settings']['handler_settings']['view']['view_name'];
+      $display_id = $field['settings']['handler_settings']['view']['display_name'];
+      $view = views_get_view($view_name);
+
+      $base_table = $view->base_table;
+      $bundle_field = '';
+
+      $info = entity_get_info();
+      if (is_array($info)) {
+        foreach ($info as $type => $value) {
+          if ($value['base table'] == $base_table) {
+            $bundle_field = $value['entity keys']['bundle'];
+            break;
+          }
+        }
+      }
+
+      if (!empty($bundle_field)) {
+        $filter = $view->get_item($display_id, 'filter', $bundle_field);
+        if (is_array($filter) && isset($filter['value'])) {
+          $settings['bundles'] = $filter['value'];
+        } elseif (is_array($field['settings']['handler_settings']['view']['args'])) {
+          $arguments = $view->get_items('argument');
+          if (is_array($arguments) && isset($arguments[$bundle_field])) {
+            $i = 0;
+            foreach (array_keys($arguments) as $argument) {
+              if ($argument == $bundle_field) {
+                if (isset($field['settings']['handler_settings']['view']['args'][$i])) {
+                  $args = explode('+', $field['settings']['handler_settings']['view']['args'][$i]);
+                  $settings['bundles'] = array();
+                  foreach ($args as $arg) {
+                    $settings['bundles'][$arg] = $arg;
+                  }
+                }
+                break;
+              }
+              $i++;
+            }
+          }
+        }
+      }
+    }
   }
   elseif ($field['type'] == 'commerce_line_item_reference') {
     $settings['entity_type'] = 'commerce_line_item';
