@@ -13,7 +13,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\inline_entity_form\TranslationHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\content_translation\ContentTranslationManagerInterface;
 
 /**
  * Inline entity form widget base class.
@@ -56,13 +55,6 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
   protected $entityDisplayRepository;
 
   /**
-   * The content translation manager.
-   *
-   * @var \Drupal\content_translation\ContentTranslationManagerInterface
-   */
-  protected $contentTranslationManager;
-
-  /**
    * Constructs an InlineEntityFormBase object.
    *
    * @param string $plugin_id
@@ -81,16 +73,13 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
    *   The entity type manager.
    * @param \Drupal\Core\Entity\EntityDisplayRepositoryInterface $entity_display_repository
    *   The entity display repository.
-   * @param \Drupal\content_translation\ContentTranslationManagerInterface $manager
-   *   Content translation manager.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, EntityTypeBundleInfoInterface $entity_type_bundle_info, EntityTypeManagerInterface $entity_type_manager, EntityDisplayRepositoryInterface $entity_display_repository, ContentTranslationManagerInterface $translation_manager) {
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, EntityTypeBundleInfoInterface $entity_type_bundle_info, EntityTypeManagerInterface $entity_type_manager, EntityDisplayRepositoryInterface $entity_display_repository) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
 
     $this->entityTypeBundleInfo = $entity_type_bundle_info;
     $this->entityTypeManager = $entity_type_manager;
     $this->entityDisplayRepository = $entity_display_repository;
-    $this->contentTranslationManager = $translation_manager;
     $this->createInlineFormHandler();
   }
 
@@ -106,8 +95,7 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
       $configuration['third_party_settings'],
       $container->get('entity_type.bundle.info'),
       $container->get('entity_type.manager'),
-      $container->get('entity_display.repository'),
-      $container->get('content_translation.manager')
+      $container->get('entity_display.repository')
     );
   }
 
@@ -481,7 +469,7 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
    */
   protected function isTranslating(FormStateInterface $form_state) {
     if (TranslationHelper::isTranslating($form_state)) {
-      $translation_manager = $this->contentTranslationManager;
+      $translation_manager = \Drupal::service('content_translation.manager');
       $target_type = $this->getFieldSetting('target_type');
       foreach ($this->getTargetBundles() as $bundle) {
         if ($translation_manager->isEnabled($target_type, $bundle)) {
