@@ -34,7 +34,12 @@ class MigrationHelper {
       if (isset($source['class'])) {
         // Field instance.
         if ($source['class'] === FieldInstance::class) {
-          $settings[] = $migration['process']['settings'];
+          $settings = $migration['process']['settings'];
+          if (isset($settings['plugin'])) {
+            // Prepare for multiple plugins,
+            // as there was only one before:
+            $settings = [$settings];
+          }
           $addition = [
             'inline_entity_form' => [
               'plugin' => 'inline_entity_form_field_instance_settings',
