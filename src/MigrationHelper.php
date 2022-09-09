@@ -49,11 +49,14 @@ class MigrationHelper {
           $migration['process']['settings'] = $settings;
         }
         if (is_a($source['class'], FieldInstancePerFormDisplay::class, TRUE)) {
-          $addition = [
-            'inline_entity_form_single' => 'inline_entity_form_simple',
-            'inline_entity_form' => 'inline_entity_form_complex',
-          ];
-          $migration['process']['options/type']['type']['map'] = array_merge($migration['process']['options/type']['type']['map'], $addition);
+          // Ensure the map exists and is an array:
+          if (!empty($migration['process']['options/type']['type']['map']) && is_array($migration['process']['options/type']['type']['map'])) {
+            $map_addition = [
+              'inline_entity_form_single' => 'inline_entity_form_simple',
+              'inline_entity_form' => 'inline_entity_form_complex',
+            ];
+            $migration['process']['options/type']['type']['map'] = array_merge($migration['process']['options/type']['type']['map'], $map_addition);
+          }
         }
       }
     }
