@@ -28,6 +28,11 @@ class MigrationHelper {
       /** @var \Drupal\migrate\Plugin\MigrateSourcePluginManager $source_plugin_manager */
       $source_plugin_manager = \Drupal::service('plugin.manager.migrate.source');
       $source = NULL;
+      if (!empty($migration['migration_group'])) {
+        // Integrate shared group configuration into the migration, in order to
+        // have full migration definitions in place.
+        $this->getMigrationWithSharedConfiguration($migration);
+      }
       if (isset($migration['source']['plugin'])) {
         $source = $source_plugin_manager->getDefinition($migration['source']['plugin']);
       }
@@ -136,6 +141,38 @@ class MigrationHelper {
       }
     }
     return $bundles;
+  }
+
+  /**
+   * Helper to get the full migration with shared configuration.
+   *
+   * @param array $migration
+   *   The migration to process.
+   */
+  protected function getMigrationWithSharedConfiguration(array &$migration) {
+    // Integrate shared group configuration into the migration.
+    if (!empty($migration['migration_group'])) {
+      $group = \Drupal\migrate_plus\Entity\MigrationGroup::load($migration['migration_group']);
+      $shared_configuration = !empty($group) ? $group->get('shared_configuration') : [];
+      if (!empty($shared_configuration)) {
+        foreach ($shared_configuration as $key => $group_value) {
+          $migration_value = $migration[$key] ?? NULL;
+          // Where both the migration and the group provide arrays, replace
+          // recursively (so each key collision is resolved in favor of the
+          // migration).
+          if (is_array($migration_value) && is_array($group_value)) {
+            $merged_values = array_replace_recursive($group_value, $migration_value);
+            $migration[$key] = $merged_values;
+          }
+          // Where the group provides a value the migration doesn't, use the group
+          // value.
+          elseif (is_null($migration_value)) {
+            $migration[$key] = $group_value;
+          }
+          // Otherwise, the existing migration value overrides the group value.
+        }
+      }
+    }
   }
 
 }
